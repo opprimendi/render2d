@@ -1,0 +1,22 @@
+# Build and Release Folders
+bin/
+bin-debug/
+bin-release/
+out/
+target/
+
+# Project property files
+.actionScriptProperties
+.flexLibProperties
+.settings/
+.idea/
+.project
+.DS_Store
+*.iml
+lib/
+build.properties
+tests/report/
+tests/TestRunner.mxml
+tests/TestRunner.as
+tests/TestRunner.swf
+opprimendi-away3d-unittests.as3proj
