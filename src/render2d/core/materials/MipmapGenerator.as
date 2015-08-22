@@ -1,12 +1,12 @@
 package render2d.core.materials 
 {
-	import render2d.utils.FastMath;
 	import flash.display.BitmapData;
 	import flash.display3D.textures.CubeTexture;
 	import flash.display3D.textures.Texture;
 	import flash.display3D.textures.TextureBase;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
+	import render2d.utils.FastMath;
 	
 	/**
 	 * MipmapGenerator is a helper class that uploads BitmapData to a Texture including mipmap levels.
