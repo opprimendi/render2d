@@ -1,13 +1,11 @@
 package render2d.core.renderers 
 {
 	import render2d.core.display.Mesh;
-	/**
-	 * ...
-	 * @author Asfel
-	 */
+	import render2d.core.display.Renderable;
+	
 	public class DisplayList 
 	{
-		public var list:Vector.<Mesh> = new Vector.<Mesh>;
+		public var list:Vector.<Renderable> = new Vector.<Renderable>;
 		
 		public function DisplayList() 
 		{

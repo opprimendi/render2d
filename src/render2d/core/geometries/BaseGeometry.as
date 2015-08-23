@@ -5,15 +5,11 @@ package render2d.core.geometries
 	import flash.display3D.Context3DVertexBufferFormat;
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
-	/**
-	 * ...
-	 * @author Asfel
-	 */
+	
 	public class BaseGeometry 
 	{
 		public var vertexBuffer:VertexBuffer3D;
 		public var indexBuffer:IndexBuffer3D;
-		
 		
 		public var id:int = Ident.next();
 		
@@ -23,6 +19,11 @@ package render2d.core.geometries
 		public var indecis:Vector.<uint> = new Vector.<uint>;
 		
 		public var _init:Boolean;
+		
+		public var minX:Number = 0;
+		public var maxX:Number = 0;
+		public var minY:Number = 0;
+		public var maxY:Number = 0;
 		
 		public function BaseGeometry() 
 		{
@@ -36,6 +37,11 @@ package render2d.core.geometries
 		
 		public function addVertex(x:Number, y:Number, u:Number, v:Number):void
 		{
+			minX = Math.min(x, minX);
+			maxX = Math.max(x, maxX);
+			minY = Math.min(y, minY);
+			maxY = Math.max(y, maxY);
+			
 			vertices.push(x, y, u, v);
 		}
 		
