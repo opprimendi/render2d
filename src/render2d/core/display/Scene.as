@@ -7,21 +7,26 @@ package render2d.core.display
 	
 	public class Scene 
 	{
+		protected var width:Number;
+		protected var height:Number;
+		
 		public var renderer:IRenderer;
 		public var displayList:DisplayList = new DisplayList();
 		public var camera:Camera = new Camera();
 		
-		private var toRenderList:Vector.<Renderable> = new Vector.<Renderable>(5000, true);
-		private var toRenderCount:int = 0;
+		protected var toRenderList:Vector.<Renderable> = new Vector.<Renderable>(5000, true);
+		protected var toRenderCount:int = 0;
 		
 		public function Scene(width:Number, height:Number, renderer:IRenderer) 
 		{
+			this.height = height;
+			this.width = width;
 			this.renderer = renderer;
 			renderer.configure(width, height);
 			camera.configure(width, height);
 		}
 		
-		private function collectRenderables():void
+		protected function collectRenderables():void
 		{
 			//TODO: вынести в отдельный объект коллектор чтобы можно было  юзать разные стратегии. И в нем же сортировать
 			

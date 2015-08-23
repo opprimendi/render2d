@@ -1,12 +1,8 @@
 package render2d.core.geometries 
 {
-	/**
-	 * ...
-	 * @author Asfel
-	 */
 	public class Transform 
 	{
-		private var _transformData:Vector.<Number> = new Vector.<Number>(8, true);
+		protected var _transformData:Vector.<Number> = new Vector.<Number>(8, true);
 		
 		public var x:Number = 0;
 		public var y:Number = 0;
@@ -56,7 +52,7 @@ package render2d.core.geometries
 		public function get transformData():Vector.<Number> 
 		{
 			_transformData[0] = x;
-			_transformData[1] = y;
+			_transformData[1] = -y;
 			
 			_transformData[2] = scaleX;
 			_transformData[3] = -scaleY;
