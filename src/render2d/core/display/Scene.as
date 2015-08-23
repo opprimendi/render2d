@@ -38,6 +38,10 @@ package render2d.core.display
 			for (var i:int = 0; i < renderablesCount; i++)
 			{
 				var renderable:Renderable = renderablesList[i];
+				
+				//if (!renderable.visible)
+				//	continue;
+				
 				var geometry:BaseGeometry = renderable.geometry;
 				
 				if (renderable.x + geometry.maxX < minX || renderable.x + geometry.minX > maxX)

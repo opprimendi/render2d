@@ -5,9 +5,9 @@ package render2d.core.materials
 
 	public class BaseMaterial 
 	{
-		public var id:int = Ident.next();
+		//public var id:int = Ident.next();
 		
-		private var texture:TextureBase;
+		public var texture:TextureBase;
 		//private var _init:Boolean;
 		
 		public function BaseMaterial(texture:TextureBase) 

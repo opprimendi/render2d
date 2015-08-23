@@ -11,7 +11,7 @@ package render2d.core.geometries
 		public var vertexBuffer:VertexBuffer3D;
 		public var indexBuffer:IndexBuffer3D;
 		
-		public var id:int = Ident.next();
+		//public var id:int = Ident.next();
 		
 		public var numVertices:int;
 		

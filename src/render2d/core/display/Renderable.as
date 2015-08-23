@@ -14,6 +14,8 @@ package render2d.core.display
 			
 		}
 		
+		public var visible:Boolean = false;
+		
 		public function get width():Number
 		{
 			return Math.abs(geometry.minX - geometry.maxX);

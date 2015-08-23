@@ -6,12 +6,14 @@ package render2d.core.renderers
 	import render2d.core.cameras.Camera;
 	import render2d.core.display.Renderable;
 	import render2d.core.geometries.BaseGeometry;
+	import render2d.core.materials.BaseMaterial;
 	import render2d.core.shading.BasicShader;
 
 	public class BasicRenderer implements IRenderer
 	{
 		private var context3D:Context3D;
 		private var basicShader:BasicShader = new BasicShader();
+		private var currentMaterial:BaseMaterial;
 		
 		public function BasicRenderer(context3D:Context3D) 
 		{
@@ -40,8 +42,7 @@ package render2d.core.renderers
 			
 			context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, camera.transformData, 2);
 			
-			if(renderablesCount > 0)
-				renderablesList[0].material.render(context3D);
+			currentMaterial = null;
 			
 			var renderable:Renderable;
 			var geom:BaseGeometry;
@@ -49,6 +50,13 @@ package render2d.core.renderers
 			for (var i:int = 0; i < renderablesCount; i++)
 			{
 				renderable = renderablesList[i];
+				
+				if (currentMaterial == null || currentMaterial.texture != renderable.material.texture)
+				{
+					currentMaterial = renderable.material;
+					currentMaterial.render(context3D);
+				}
+				
 				geom = renderable.geometry;
 				
 				geom.render(context3D);

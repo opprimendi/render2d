@@ -20,8 +20,8 @@ package render2d.core.shading
 								
 			fragmentData = 			//anisotropic2x												 		//pixel(Vec2 position, TextureFillModel fillMode, TextureSampler sampler, MipMapSampler mipSampler, Number bias)
 										"tex ft0, v0, fs0 <2d,repeat,linear,miplinear,-0.5> \n" //Pixel pixel = texture.getPixelAt(fs0, TextureFillModel.WRAP, TextureSampler.LINEAR, MipMapSampler.LINEAR, -0.5
-									+	"add ft0, v0, ft0 \n"
-									+	"div ft0, v0, ft0 \n"
+									//+	"add ft0, v0, ft0 \n"
+									//+	"div ft0, v0, ft0 \n"
 									+	"mov oc, ft0"
 		}
 	}
