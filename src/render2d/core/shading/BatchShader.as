@@ -1,16 +1,18 @@
 package render2d.core.shading 
 {
-	public class BasicShader extends AssemblerShader
+	public class BatchShader extends AssemblerShader
 	{
-		public function BasicShader() 
+		public function BatchShader() 
 		{
 			vertexData = 
 																					//Matrix3D cameraTransform = vc0;
 																					//Matrix3D meshTransform = vc2;
 									"mov	vt0 		va0						\n" //Vec2[] meshVertexData = mesh.vertexData;
-								+	"mul	vt0.xy		vt0.xy		vc2.zw		\n" //meshVertexData.multipy(meshTransform.scale);
+								+	"mov	vt2 		vc[va2.x]						\n" //Vec2[] meshVertexData = mesh.vertexData;
+								//+	"mov	vt2 		vc4						\n" //Vec2[] meshVertexData = mesh.vertexData;
+								+	"mul	vt0.xy		vt0.xy		vt2.zw		\n" //meshVertexData.multipy(meshTransform.scale);
 								+	"sub	vt0.xy		vt0.xy		vc0.xy		\n" //meshVertexData.sub(cameraTransform.position);
-								+	"add	vt0.xy		vt0.xy		vc2.xy		\n" //meshVertexData.add(meshTransform.position);
+								+	"add	vt0.xy		vt0.xy		vt2.xy		\n" //meshVertexData.add(meshTransform.position);
 								+	"mov	vt1.xy		vc0.zw					\n" //Vec2 cameraScale = cameraTransform.scale;
 								+	"abs	vt1.y		vt1.y					\n"	//cameraScale.y = Math.abs(cameraScale.y);
 								+	"mul	vt0.xy		vt0.xy		vt1.xy		\n" //meshVertexData.multipy(cameraScale);

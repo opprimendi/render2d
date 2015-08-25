@@ -1,6 +1,6 @@
 package render2d.core.shading 
 {
-	import com.adobe.utils.AGALMiniAssembler;
+	import com.adobe.utils.v3.AGALMiniAssembler;
 	import flash.display3D.Context3DProgramType;
 	
 	public class AssemblerShader extends AbstractShader 

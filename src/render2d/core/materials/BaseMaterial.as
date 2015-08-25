@@ -8,6 +8,11 @@ package render2d.core.materials
 		//public var id:int = Ident.next();
 		
 		public var texture:TextureBase;
+		public var useColor:Boolean = false;
+		public var r:int;
+		public var g:int;
+		public var b:int;
+		
 		//private var _init:Boolean;
 		
 		public function BaseMaterial(texture:TextureBase) 

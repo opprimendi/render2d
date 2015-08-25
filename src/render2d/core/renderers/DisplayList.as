@@ -12,7 +12,7 @@ package render2d.core.renderers
 			
 		}
 		
-		public function add(mesh:Mesh):void
+		public function add(mesh:Renderable):void
 		{
 			list.push(mesh);
 		}

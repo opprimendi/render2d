@@ -1,5 +1,6 @@
 package render2d.core.display 
 {
+	import flash.display3D.Context3D;
 	import render2d.core.geometries.BaseGeometry;
 	import render2d.core.geometries.Transform;
 	import render2d.core.materials.BaseMaterial;
@@ -10,6 +11,11 @@ package render2d.core.display
 		public var geometry:BaseGeometry;
 		
 		public function Renderable() 
+		{
+			
+		}
+		
+		public function render(context3D:Context3D):void
 		{
 			
 		}
