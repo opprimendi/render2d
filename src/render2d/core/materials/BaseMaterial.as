@@ -9,9 +9,10 @@ package render2d.core.materials
 		
 		public var texture:TextureBase;
 		public var useColor:Boolean = false;
-		public var r:int;
-		public var g:int;
-		public var b:int;
+		public var r:Number;
+		public var g:Number;
+		public var b:Number;
+		public var a:Number;
 		
 		//private var _init:Boolean;
 		

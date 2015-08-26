@@ -7,6 +7,9 @@ package render2d.core.cameras
 		private var _width:Number;
 		private var _height:Number;
 		
+		private var halfWidth:Number;
+		private var halfHeiight:Number;
+		
 		public function Camera() 
 		{
 			
@@ -17,27 +20,30 @@ package render2d.core.cameras
 			_height = height;
 			_width = width;
 			
+			halfWidth = width / 2;
+			halfHeiight = height / 2;
+			
 			screenSpaceRatio = 1 / ((_width + _height) / 4);
 		}
 		
 		public function get minX():Number
 		{
-			return x - _width / 2;
+			return x - halfWidth / scaleX;
 		}
 		
 		public function get maxX():Number
 		{
-			return x + _width / 2;
+			return x + halfWidth / scaleX;
 		}
 		
 		public function get minY():Number
 		{
-			return y - _height / 2;
+			return y - halfHeiight / scaleY;
 		}
 		
 		public function get maxY():Number
 		{
-			return y + _height / 2;
+			return y + halfHeiight / scaleY;
 		}
 		
 		public function get screenSpaceRatio():Number 

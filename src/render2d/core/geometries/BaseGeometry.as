@@ -1,7 +1,6 @@
 package render2d.core.geometries 
 {
 	import flash.display3D.Context3D;
-	import flash.display3D.Context3DBufferUsage;
 	import flash.display3D.Context3DVertexBufferFormat;
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;

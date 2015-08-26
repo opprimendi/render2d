@@ -62,7 +62,7 @@ package render2d.core.materials
 				_matrix.a = _rect.width / source.width;
 				_matrix.d = _rect.height / source.height;
 				
-				mipmap.draw(source, _matrix, null, null, null, false);
+				mipmap.draw(source, _matrix, null, null, null, true);
 				
 				if (target is Texture)
 				{
