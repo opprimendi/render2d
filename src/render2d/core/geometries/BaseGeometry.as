@@ -4,9 +4,11 @@ package render2d.core.geometries
 	import flash.display3D.Context3DVertexBufferFormat;
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
+	import render2d.core.renderers.RenderSupport;
 	
 	public class BaseGeometry 
 	{
+		private var renderSupport:RenderSupport;
 		public var vertexBuffer:VertexBuffer3D;
 		public var indexBuffer:IndexBuffer3D;
 		
@@ -24,6 +26,9 @@ package render2d.core.geometries
 		public var minY:Number = 0;
 		public var maxY:Number = 0;
 		
+		public var verticesCount:int = 0;
+		public var trianglesCount:int = 0;
+		
 		public function BaseGeometry() 
 		{
 			
@@ -32,6 +37,7 @@ package render2d.core.geometries
 		public function mapTriangle(v1:int, v2:int, v3:int):void
 		{
 			indecis.push(v1, v2, v3);
+			trianglesCount++;
 		}
 		
 		public function addVertex(x:Number, y:Number, u:Number, v:Number):void
@@ -41,21 +47,22 @@ package render2d.core.geometries
 			minY = Math.min(y, minY);
 			maxY = Math.max(y, maxY);
 			
+			verticesCount += 4;
 			vertices.push(x, y, u, v);
 		}
 		
-		public function render(context3D:Context3D):void
+		public function render(renderSupport:RenderSupport):void
 		{
 			if (!_init)
-				init(context3D);
+				init(renderSupport);
 				
-			setBuffers(context3D);
+			setBuffers(renderSupport);
 		}
 		
-		private function setBuffers(context3D:Context3D):void 
+		private function setBuffers(renderSupport:RenderSupport):void 
 		{
-			context3D.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
-			context3D.setVertexBufferAt(1, vertexBuffer, 2, Context3DVertexBufferFormat.FLOAT_2);
+			renderSupport.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
+			renderSupport.setVertexBufferAt(1, vertexBuffer, 2, Context3DVertexBufferFormat.FLOAT_2);
 		}
 		
 		public function uploadVertexBuffer(offset:int = 0, length:int = 0):void
@@ -66,7 +73,7 @@ package render2d.core.geometries
 			if (length == 0)
 				length = numVertices;
 			
-			vertexBuffer.uploadFromVector(vertices, offset, length);
+			renderSupport.uploadVertexBuffer(vertexBuffer, vertices, offset, length);
 		}
 		
 		public function uploadIndexBuffer(offset:int = 0, length:int = 0):void
@@ -77,17 +84,19 @@ package render2d.core.geometries
 			if (length == 0)
 				length = numVertices;
 			
-			indexBuffer.uploadFromVector(indecis, offset, length);
+			renderSupport.uploadIndexBuffer(indexBuffer, indecis, offset, length);
 		}
 		
-		private function init(context3D:Context3D):void 
+		private function init(renderSupport:RenderSupport):void 
 		{
 			_init = true;
 			
+			this.renderSupport = renderSupport;
+			
 			numVertices = vertices.length / 4;
 			
-			vertexBuffer = context3D.createVertexBuffer(numVertices, 4);
-			indexBuffer = context3D.createIndexBuffer(indecis.length);
+			vertexBuffer = renderSupport.createVertexBuffer(numVertices, 4);
+			indexBuffer = renderSupport.createIndexBuffer(indecis.length);
 			
 			uploadVertexBuffer(0, numVertices);
 			uploadIndexBuffer(0, indecis.length);

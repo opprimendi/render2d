@@ -49,6 +49,11 @@ package render2d.core.geometries
 			return _transformData[6];
 		}
 		
+		public function set transformData(value:Vector.<Number>):void
+		{
+			this._transformData = value
+		}
+		
 		public function get transformData():Vector.<Number> 
 		{
 			_transformData[0] = x;

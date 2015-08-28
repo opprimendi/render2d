@@ -7,24 +7,33 @@ package render2d.core.text
 	public class TextField extends Mesh
 	{
 		private var textFormat:TextFormat;
+		private var text:String;
 		
 		public var textWidth:Number;
 		public var textHeight:Number;
 		
-		public function TextField(text:String, textWidth:Number, textHeight:Number, textFormat:TextFormat) 
+		public function TextField(text:String, textWidth:Number, textHeight:Number, textFormat:TextFormat, isGenerateGeometry:Boolean = true) 
 		{
+			this.text = text;
 			this.textHeight = textHeight;
 			this.textWidth = textWidth;
 			this.textFormat = textFormat;
 			
-			geometry = new BaseGeometry();
 			this.material = new BaseMaterial(textFormat.font.fontMaterial);
 			
-			textFormat.font.fillBatched(geometry.vertices, geometry.indecis, textWidth, textHeight, text, textFormat.fontSize, textFormat.hAlign, textFormat.vAlign);
+			if (isGenerateGeometry)
+			{
+				geometry = new BaseGeometry();
+				textFormat.font.fillBatched(geometry.vertices, geometry.indecis, textWidth, textHeight, text, textFormat.fontSize, textFormat.hAlign, textFormat.vAlign);
+			}
 		}
 		
-		
-		
+		public function clone():TextField
+		{
+			var textField:TextField = new TextField(text, textWidth, textHeight, textFormat, false);
+			textField.geometry = this.geometry;
+			
+			return textField;
+		}
 	}
-
 }

@@ -4,6 +4,7 @@ package render2d.core.shading
 	import flash.display3D.Program3D;
 	import flash.utils.ByteArray;
 	import render2d.core.error.AbstractMethodError;
+	import render2d.core.renderers.RenderSupport;
 	
 	public class AbstractShader 
 	{
@@ -25,19 +26,19 @@ package render2d.core.shading
 			throw new AbstractMethodError("compile");
 		}
 		
-		public function create(context3D:Context3D):void
+		public function create(renderSupport:RenderSupport):void
 		{
-			program = context3D.createProgram();
+			program = renderSupport.createProgram();
 		}
 		
-		public function upload():void
+		public function upload(renderSupport:RenderSupport):void
 		{
-			program.upload(compiledVertexData, compiledFragmentData);
+			renderSupport.upload(program, compiledVertexData, compiledFragmentData);
 		}
 		
-		public function setToContext(context3D:Context3D):void
+		public function setToContext(renderSupport:RenderSupport):void
 		{
-			context3D.setProgram(program);
+			renderSupport.setProgram(program);
 		}
 	}
 

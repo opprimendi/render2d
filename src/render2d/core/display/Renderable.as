@@ -1,9 +1,9 @@
 package render2d.core.display 
 {
-	import flash.display3D.Context3D;
 	import render2d.core.geometries.BaseGeometry;
 	import render2d.core.geometries.Transform;
 	import render2d.core.materials.BaseMaterial;
+	import render2d.core.renderers.RenderSupport;
 	
 	public class Renderable extends Transform
 	{
@@ -15,9 +15,9 @@ package render2d.core.display
 			
 		}
 		
-		public function render(context3D:Context3D):void
+		public function render(renderSupport:RenderSupport):void
 		{
-			
+			renderSupport.drawRenderable(this);
 		}
 		
 		public var visible:Boolean = false;
