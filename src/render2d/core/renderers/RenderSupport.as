@@ -1,6 +1,7 @@
 package render2d.core.renderers 
 {
 	import flash.display3D.Context3D;
+	import flash.display3D.Context3DProfile;
 	import flash.display3D.Context3DProgramType;
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.Program3D;
@@ -16,8 +17,14 @@ package render2d.core.renderers
 	{
 		public var rendererDebugData:RendererDebugData = new RendererDebugData();
 		
-		public var maxVertexConstants:int = 128;
-		public var maxFragmentConstants:int = 30;
+		private var maxVertexBuffers:int = 4096;
+		private var maxIndexBuffers:int = 4096;
+		private var maxProgram:int = 4096;
+		private var maxTextures:int = 4096;
+		
+		public static var maxVertexConstants:int = 128;
+		public static var maxFragmentConstants:int = 28;
+		static public var maxAgalVersion:int = 1;
 		
 		public var freeVertexConstants:int = 0;
 		public var freeFragmentConstants:int = 0;
@@ -34,6 +41,22 @@ package render2d.core.renderers
 		public function RenderSupport(context3D:Context3D) 
 		{
 			this.context3D = context3D;
+			
+			rendererDebugData.profile = context3D.profile;
+			rendererDebugData.driver = context3D.driverInfo;
+			
+			if (context3D.profile == Context3DProfile.BASELINE)
+			{
+				maxVertexConstants = 128;
+				maxFragmentConstants = 28;
+				maxAgalVersion = 1;
+			}
+			else if (context3D.profile == Context3DProfile.STANDARD_CONSTRAINED)
+			{
+				maxVertexConstants = 250;
+				maxFragmentConstants = 64;
+				maxAgalVersion = 2;
+			}
 			
 			freeVertexConstants = maxVertexConstants;
 			freeFragmentConstants = maxFragmentConstants;
@@ -172,6 +195,9 @@ package render2d.core.renderers
 		
 		public function setProgram(program:Program3D):void 
 		{
+			if (currentProgram == program)
+				return;
+			
 			rendererDebugData.stateChanges++;
 			context3D.setProgram(program);
 		}

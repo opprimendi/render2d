@@ -4,6 +4,7 @@ package render2d.core.display
 	import flash.display3D.Context3DProgramType;
 	import flash.display3D.Context3DVertexBufferFormat;
 	import flash.display3D.VertexBuffer3D;
+	import flash.geom.Vector3D;
 	import render2d.core.geometries.BaseGeometry;
 	import render2d.core.renderers.RenderSupport;
 	
@@ -16,10 +17,20 @@ package render2d.core.display
 		
 		private var primitive:BaseGeometry;
 		
-		private var maxRenderables:int = (128 - 4) / 2;
+		
+		private var maxUsedConstantsByLayer:int = RenderSupport.maxVertexConstants - 4;
+		private var maxRenderables:int = maxUsedConstantsByLayer / 2;
+		private var maxUsedRegisters:int = (maxUsedConstantsByLayer + 1) * 4;
+		
+		
+		private var constantsVector:Vector.<Number>
+		private var identityVector:Vector.<Number>
 		
 		public function BatchedLayer(primitive:BaseGeometry) 
 		{
+			constantsVector = new Vector.<Number>(maxUsedRegisters, true);
+			identityVector = new Vector.<Number>(maxUsedRegisters, true);
+			
 			this.primitive = primitive;
 			geometry = new BaseGeometry();
 			
@@ -41,6 +52,12 @@ package render2d.core.display
 				var orderValue:int = 4 + delta / 2;
 				orderBufferData.push(orderValue, orderValue, orderValue, orderValue);
 			}
+		}
+		
+				
+		public function clean():void 
+		{
+			renderablesList = new Vector.<Renderable>;
 		}
 		
 		public function addRenderable(renderable:Renderable):void
@@ -67,6 +84,7 @@ package render2d.core.display
 			
 			var isNeedFinalRender:Boolean = true;
 			var k:int = 0;
+			var registerIndex:int = 0;
 			for (var i:int = 0; i < renderablesList.length; i++)
 			{
 				isNeedFinalRender = true;
@@ -74,23 +92,56 @@ package render2d.core.display
 				
 				var renderable:Renderable = renderablesList[i];
 				//trace(renderable.transformData);
-				renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4 + k * 2, renderable.transformData, 2);
+				
+				
+				constantsVector[registerIndex++] = renderable.transformData[0];
+				constantsVector[registerIndex++] = renderable.transformData[1];
+				constantsVector[registerIndex++] = renderable.transformData[2];
+				constantsVector[registerIndex++] = renderable.transformData[3];
+				constantsVector[registerIndex++] = renderable.transformData[4];
+				constantsVector[registerIndex++] = renderable.transformData[5];
+				constantsVector[registerIndex++] = renderable.transformData[6];
+				constantsVector[registerIndex++] = renderable.transformData[7];
+				
+				//trace(constantsVector,"/" , renderable.transformData);
+				//renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4 + 2 * k, renderable.transformData, 2);
 				k++;
+				
 				
 				if (k == maxRenderables)
 				{
-					k = 0;
 					isNeedFinalRender = false;
+					renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, constantsVector, k * 2);
 					renderSupport.drawRenderable(this);
+					
+					registerIndex = 0;
+					
+					k = 0;
 				}
-				
-				
-				
 			}
 			
-			renderSupport.drawRenderable(this);
+			if (isNeedFinalRender)
+			{
+				renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, constantsVector, k * 2);
+				renderSupport.drawRenderable(this);
+			}
 			
+				
+			constantsVector = new Vector.<Number>(maxUsedRegisters, true);
+			
+			renderSupport.setVertexBufferAt(2, null, 0, Context3DVertexBufferFormat.FLOAT_1);
+			renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, constantsVector, maxRenderables * 2);
+			
+			//for (i = 0; i < renderablesList.length; i++)
+			//{
+				
+				//k++;
+				
+				//if (k == maxRenderables)
+				//	break;
+			//}
 		}
+
 		
 	}
 

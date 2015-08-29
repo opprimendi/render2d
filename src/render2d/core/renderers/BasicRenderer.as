@@ -23,7 +23,7 @@ package render2d.core.renderers
 		public function BasicRenderer(context3D:Context3D) 
 		{
 			this.context3D = context3D;
-			context3D.enableErrorChecking = false;
+			context3D.enableErrorChecking = true;
 			
 			renderSupport = new RenderSupport(context3D);
 			
@@ -70,28 +70,35 @@ package render2d.core.renderers
 			{
 				renderable = renderablesList[i];
 				
-				if (renderable.material.useColor)
-				{
-					fragmentColorBuffer[0] = renderable.material.r;
-					fragmentColorBuffer[1] = renderable.material.g;
-					fragmentColorBuffer[2] = renderable.material.b;
-					fragmentColorBuffer[3] = renderable.material.a;
-					
-				}
-				else
-				{
-					fragmentColorBuffer[0] = 0;
-					fragmentColorBuffer[1] = 0;
-					fragmentColorBuffer[2] = 0;
-					fragmentColorBuffer[3] = 0;
-				}
-				
-				renderSupport.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, fragmentColorBuffer, 1);
 
 				if (renderable is BatchedLayer)
+				{
+					
 					batchShader.setToContext(renderSupport);
+				}
 				else
+				{
+					
+					if (renderable.material.useColor)
+					{
+						fragmentColorBuffer[0] = renderable.material.r;
+						fragmentColorBuffer[1] = renderable.material.g;
+						fragmentColorBuffer[2] = renderable.material.b;
+						fragmentColorBuffer[3] = renderable.material.a;
+						
+					}
+					else
+					{
+						fragmentColorBuffer[0] = 0;
+						fragmentColorBuffer[1] = 0;
+						fragmentColorBuffer[2] = 0;
+						fragmentColorBuffer[3] = 0;
+					}
+					
+					renderSupport.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, fragmentColorBuffer, 1);
+					
 					basicShader.setToContext(renderSupport);
+				}
 					
 				renderable.render(renderSupport);
 				

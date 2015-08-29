@@ -25,8 +25,8 @@ package render2d.core.renderers.debug
 		public var vertexBuffersCreated:int = 0;
 		public var indexBuffersCreated:int = 0;
 		
-		
-		
+		public var driver:String;
+		public var profile:String;
 		
 		
 		public function RendererDebugData() 
@@ -48,13 +48,19 @@ package render2d.core.renderers.debug
 		
 		public function toString():String 
 		{
-			return "[RendererDebugData\nstateChanges=" + stateChanges + "\ndrawCalls=" + drawCalls + "\nmaterialsUsed=" + materialsUsed + 
+			return "[RendererDebugData" +
 						
-						"\ngeometriesCount=" + geometriesCount + "\ntrianglesCount=" + trianglesCount + "\nverticesCount=" + verticesCount +
+						"\n driver=" + driver + "\n profile=" + profile + 
 						
-						"\nvertexBuffersUpload=" + vertexBuffersUpload + "\nindexBuffersUpload=" + indexBuffersUpload + "\nprogramUploaded=" + programUploaded + 
+						"\n stateChanges=" + stateChanges + "\n drawCalls=" + drawCalls + "\n materialsUsed=" + materialsUsed + 
 						
-						"\nprogramCreated=" + programCreated + "\nvertexBuffersCreated=" + vertexBuffersCreated + "\nindexBuffersCreated=" + indexBuffersCreated + "\n]";
+						"\n geometriesCount=" + geometriesCount + "\n trianglesCount=" + trianglesCount + "\n verticesCount=" + verticesCount +
+						
+						"\n vertexBuffersUpload=" + vertexBuffersUpload + "\n indexBuffersUpload=" + indexBuffersUpload + "\n programUploaded=" + programUploaded + 
+						
+						"\n programCreated=" + programCreated + "\n vertexBuffersCreated=" + vertexBuffersCreated + "\n indexBuffersCreated=" + indexBuffersCreated + 
+						
+						"\n]";
 		}
 	}
 

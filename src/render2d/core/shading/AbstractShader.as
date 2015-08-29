@@ -36,6 +36,7 @@ package render2d.core.shading
 			renderSupport.upload(program, compiledVertexData, compiledFragmentData);
 		}
 		
+		
 		public function setToContext(renderSupport:RenderSupport):void
 		{
 			renderSupport.setProgram(program);
