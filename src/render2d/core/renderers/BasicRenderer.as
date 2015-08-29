@@ -4,6 +4,7 @@ package render2d.core.renderers
 	import flash.display3D.Context3DBlendFactor;
 	import flash.display3D.Context3DProgramType;
 	import render2d.core.cameras.Camera;
+	import render2d.core.display.BatchedLayer;
 	import render2d.core.display.Renderable;
 	import render2d.core.shading.BasicShader;
 	import render2d.core.shading.BatchShader;
@@ -87,7 +88,13 @@ package render2d.core.renderers
 				
 				renderSupport.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, fragmentColorBuffer, 1);
 
+				if (renderable is BatchedLayer)
+					batchShader.setToContext(renderSupport);
+				else
+					basicShader.setToContext(renderSupport);
+					
 				renderable.render(renderSupport);
+				
 			}
 			
 			renderSupport.present();
