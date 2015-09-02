@@ -15,11 +15,12 @@ package render2d.core.shading
 								+	"abs	vt1.y		vt1.y					\n"	//cameraScale.y = Math.abs(cameraScale.y);
 								+	"mul	vt0.xy		vt0.xy		vt1.xy		\n" //meshVertexData.multipy(cameraScale);
 								+	"mul	vt0.xy		vt0.xy		vc1.w		\n" //meshVertexData.multipy(cameraTransform.screenSpaceRatio);
+								//+	"mul	vt0.x		vt0.x		vc1.z		\n" //meshVertexData.multipy(cameraTransform.screenSpaceRatio);
 								+	"mov	v0, 		va1						\n" //copy uvData to v1
 								+	"mov	op,			vt0						  ";//copy meshVertexData to output
 								
 			fragmentData = 			//anisotropic2x												 		//pixel(Vec2 position, TextureFillModel fillMode, TextureSampler sampler, MipMapSampler mipSampler, Number bias)
-										"tex ft0, v0, fs0 <2d,repeat,anisotropic4x,miplinear> \n" //Pixel pixel = texture.getPixelAt(fs0, TextureFillModel.WRAP, TextureSampler.LINEAR, MipMapSampler.LINEAR, -0.5
+										"tex ft0, v0, fs0 <ignoresampler>\n"//<2d,repeat,anisotropic4x,miplinear> \n" //Pixel pixel = texture.getPixelAt(fs0, TextureFillModel.WRAP, TextureSampler.LINEAR, MipMapSampler.LINEAR, -0.5
 									//+	"add ft0, v0, ft0 \n"
 									//+	"div ft0, v0, ft0 \n"
 									+	"sub ft0.xyz ft0.xyz fc0.www \n"
