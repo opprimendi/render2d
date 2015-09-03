@@ -1,5 +1,6 @@
 package render2d.core.geometries 
 {
+	import render2d.utils.FastMath;
 	public class Transform 
 	{
 		protected var _transformData:Vector.<Number> = new Vector.<Number>(8, true);
@@ -10,9 +11,9 @@ package render2d.core.geometries
 		public var scaleX:Number = 1;
 		public var scaleY:Number = 1;
 		
-		private var _rotationX:Number;
-		private var _rotationY:Number;
-		private var _rotationZ:Number;
+		private var _rotationX:Number = 0;
+		private var _rotationY:Number = 0;
+		private var _rotationZ:Number = 0;
 		
 		public function Transform() 
 		{
@@ -21,22 +22,22 @@ package render2d.core.geometries
 		
 		public function set rotationX(value:Number):void
 		{
-			_transformData[4] = value;
+			_rotationX = value;
 		}
 		
 		public function get rotationX():Number
 		{
-			return _transformData[4];
+			return _rotationX;
 		}
 		
 		public function set rotationY(value:Number):void
 		{
-			_transformData[5] = value;
+			_rotationY = value;
 		}
 		
 		public function get rotationY():Number
 		{
-			return _transformData[5];
+			return _rotationY;
 		}
 		
 		public function set rotationZ(value:Number):void
@@ -61,6 +62,12 @@ package render2d.core.geometries
 			
 			_transformData[2] = scaleX;
 			_transformData[3] = -scaleY;
+			
+			_transformData[4] = Math.cos(FastMath.convertToRadian(_rotationX));
+			_transformData[5] = Math.sin(FastMath.convertToRadian(_rotationX));
+			
+			
+			
 			
 			return _transformData;
 		}

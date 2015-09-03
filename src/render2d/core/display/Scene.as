@@ -1,6 +1,7 @@
 package render2d.core.display 
 {
 	import render2d.core.cameras.Camera;
+	import render2d.core.display.background.Background;
 	import render2d.core.geometries.BaseGeometry;
 	import render2d.core.renderers.DisplayList;
 	import render2d.core.renderers.IRenderer;
@@ -22,8 +23,19 @@ package render2d.core.display
 			this.height = height;
 			this.width = width;
 			this.renderer = renderer;
-			renderer.configure(width, height);
+			
+			configure(width, height, width, height);
+		}
+		
+		public function configure(width:Number, height:Number, maxWidth:Number, maxHeight:Number):void
+		{
+			this.height = height;
+			this.width = width;
+			
+			renderer.configure(width, height, maxWidth, maxHeight);
 			camera.configure(width, height);
+			
+			
 		}
 		
 		protected function collectRenderables():void
@@ -43,6 +55,14 @@ package render2d.core.display
 			for (var i:int = 0; i < renderablesCount; i++)
 			{
 				var renderable:Renderable = renderablesList[i];
+				
+				if (renderable is Background)
+				{
+					toRenderList[toRenderCount] = renderable;
+					toRenderCount++;
+					
+					continue;
+				}
 				
 				//if (!renderable.visible)
 				//	continue;

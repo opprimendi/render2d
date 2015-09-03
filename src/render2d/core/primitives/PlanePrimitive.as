@@ -7,19 +7,20 @@ package render2d.core.primitives
 		
 		public function PlanePrimitive() 
 		{
-			super();
+			super(2, 4, true);
+			
 			construct();
 		}
 		
 		private function construct():void 
 		{
-			addVertex(-0.5, 0.5, 0, 0);
-			addVertex( 0.5, 0.5, 1, 0);
-			addVertex( 0.5, -0.5, 1, 1);
-			addVertex(-0.5,  -0.5, 0, 1);
+			setVertexAndUv(0, -0.5,  -0.5, 0, 0);
+			setVertexAndUv(1,  0.5,  -0.5, 1, 0);
+			setVertexAndUv(2,  0.5,   0.5, 1, 1);
+			setVertexAndUv(3, -0.5,   0.5, 0, 1);
 		
-			mapTriangle(0, 1, 2);
-			mapTriangle(0, 2, 3);
+			setTriangle(0, 0, 1, 2);
+			setTriangle(1, 0, 2, 3);
 		}
 	}
 }

@@ -46,9 +46,11 @@ package render2d.core.renderers.debug
 			geometriesCount = 0;
 		}
 		
+		private var string:String = "";
+		
 		public function toString():String 
 		{
-			return "[RendererDebugData" +
+			string = "[RendererDebugData" +
 						
 						"\n driver=" + driver + "\n profile=" + profile + 
 						
@@ -61,6 +63,8 @@ package render2d.core.renderers.debug
 						"\n programCreated=" + programCreated + "\n vertexBuffersCreated=" + vertexBuffersCreated + "\n indexBuffersCreated=" + indexBuffersCreated + 
 						
 						"\n]";
+						
+			return string;
 		}
 	}
 

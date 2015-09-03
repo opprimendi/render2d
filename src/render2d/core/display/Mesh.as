@@ -10,5 +10,10 @@ package render2d.core.display
 			this.geometry = geometry;
 			this.material = material;
 		}
+		
+		override public function toString():String 
+		{
+			return "[Mesh]";
+		}
 	}
 }

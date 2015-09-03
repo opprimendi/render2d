@@ -3,6 +3,7 @@ package render2d.core.renderers
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DBlendFactor;
 	import flash.display3D.Context3DProgramType;
+	import flash.geom.Rectangle;
 	import render2d.core.cameras.Camera;
 	import render2d.core.display.BatchedLayer;
 	import render2d.core.display.Renderable;
@@ -13,17 +14,18 @@ package render2d.core.renderers
 	{
 		private var context3D:Context3D;
 		
-		private var basicShader:BasicShader = new BasicShader();
-		private var batchShader:BatchShader = new BatchShader();
+		public var basicShader:BasicShader = new BasicShader();
+		public var batchShader:BatchShader = new BatchShader();
 		
 		private var fragmentColorBuffer:Vector.<Number> = new Vector.<Number>(4, true);
+		private var currentFragmentColorBuffer:Vector.<Number> = new Vector.<Number>(4, true);
 		
 		public var renderSupport:RenderSupport;
 		
 		public function BasicRenderer(context3D:Context3D) 
 		{
 			this.context3D = context3D;
-			context3D.enableErrorChecking = true;
+			context3D.enableErrorChecking = false;
 			
 			renderSupport = new RenderSupport(context3D);
 			
@@ -37,9 +39,12 @@ package render2d.core.renderers
 			batchShader.upload(renderSupport);
 		}
 		
-		public function configure(width:Number, height:Number):void
+		public function configure(width:Number, height:Number, maxWidth:Number, maxHeight:Number):void
 		{
 			this.context3D.configureBackBuffer(width, height, 4, false);
+			
+			this.context3D.setScissorRectangle(new Rectangle(0, 0, maxWidth, maxHeight));
+			//trace("Sc rect", maxWidth, maxHeight);
 			this.context3D.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
 			//context3D.setCulling(Context3DTriangleFace.FRONT);
 			
@@ -85,7 +90,6 @@ package render2d.core.renderers
 						fragmentColorBuffer[1] = renderable.material.g;
 						fragmentColorBuffer[2] = renderable.material.b;
 						fragmentColorBuffer[3] = renderable.material.a;
-						
 					}
 					else
 					{
@@ -95,9 +99,18 @@ package render2d.core.renderers
 						fragmentColorBuffer[3] = 0;
 					}
 					
-					renderSupport.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, fragmentColorBuffer, 1);
+					if (fragmentColorBuffer[0] != currentFragmentColorBuffer[0] || fragmentColorBuffer[1] != currentFragmentColorBuffer[1] || 
+					fragmentColorBuffer[2] != currentFragmentColorBuffer[2] || fragmentColorBuffer[3] != currentFragmentColorBuffer[3])
+					{
+						currentFragmentColorBuffer[0] = fragmentColorBuffer[0];
+						currentFragmentColorBuffer[1] = fragmentColorBuffer[1];
+						currentFragmentColorBuffer[2] = fragmentColorBuffer[2];
+						currentFragmentColorBuffer[3] = fragmentColorBuffer[3];
+						
+						renderSupport.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, fragmentColorBuffer, 1);
+					}
 					
-					basicShader.setToContext(renderSupport);
+					//basicShader.setToContext(renderSupport);
 				}
 					
 				renderable.render(renderSupport);

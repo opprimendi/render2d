@@ -307,7 +307,7 @@ package render2d.core.text
                         }
                         else if (char == null)
                         {
-                            trace("Missing character: " + charID);
+                            //trace("Missing character: " + charID);
                         }
                         else
                         {

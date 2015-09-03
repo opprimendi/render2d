@@ -28,12 +28,44 @@ package render2d.core.text
 			}
 		}
 		
+		[Inline]
+		private static function extractRed(c:uint):int 
+		{
+			return (( c >> 16 ) & 0xFF);
+		}
+			 
+		[Inline]
+		private static function extractGreen(c:uint):int 
+		{
+			return ( (c >> 8) & 0xFF );
+		}
+			 
+		[Inline]
+		private static function extractBlue(c:uint):int 
+		{
+			return ( c & 0xFF );
+		}
+		
+		public function applyColor(color:int):void
+		{
+			material.useColor = true;
+			material.r = extractRed(color)/255;
+			material.g = extractGreen(color)/255;
+			material.b = extractBlue(color)/255;
+			material.a = 1;
+		}
+		
 		public function clone():TextField
 		{
 			var textField:TextField = new TextField(text, textWidth, textHeight, textFormat, false);
 			textField.geometry = this.geometry;
 			
 			return textField;
+		}
+		
+		public function dispose():void 
+		{
+			geometry.dispose();
 		}
 	}
 }

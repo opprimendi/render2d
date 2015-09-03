@@ -27,6 +27,14 @@ package render2d.utils
 			return 180 * angle / Math.PI;
 		}	
 		
+		public static function angle(x1:Number, y1:Number, x2:Number, y2:Number):Number
+		{
+			x1 = x1 - x2;
+			y1 = y1 - y2;
+
+			return Math.atan2(x1, y1);
+        }
+		
 	}
 
 }

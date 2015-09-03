@@ -24,6 +24,7 @@ package render2d.core.cameras
 			halfHeiight = height / 2;
 			
 			screenSpaceRatio = 1 / ((_width + _height) / 4);
+			//aspectRatio = height / width;
 		}
 		
 		public function get minX():Number
@@ -44,6 +45,16 @@ package render2d.core.cameras
 		public function get maxY():Number
 		{
 			return y + halfHeiight / scaleY;
+		}
+		
+		public function get aspectRatio():Number 
+		{
+			return transformData[6];
+		}
+		
+		public function set aspectRatio(value:Number):void 
+		{
+			transformData[6] = value;
 		}
 		
 		public function get screenSpaceRatio():Number 

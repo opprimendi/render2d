@@ -8,6 +8,21 @@ package render2d.core.shading
 																					//Matrix3D cameraTransform = vc0;
 																					//Matrix3D meshTransform = vc2;
 									"mov	vt0 		va0						\n" //Vec2[] meshVertexData = mesh.vertexData;
+									
+									//float xnew = p.x * c - p.y * s;
+									//float ynew = p.x * s + p.y * c;
+									
+								+	"mov	vt2 		va0					    \n" //Vec2[] meshVertexData = mesh.vertexData;
+								+	"mul	vt2.x		vt2.x		vc3.x		\n" //meshVertexData.multipy(meshTransform.scale);
+								+	"mul	vt2.y		vt2.y		vc3.y		\n" //meshVertexData.multipy(meshTransform.scale);
+								+	"sub	vt0.x		vt2.x		vt2.y		\n" //meshVertexData.multipy(meshTransform.scale);
+								
+								
+								+	"mov	vt2 		va0					\n" //Vec2[] meshVertexData = mesh.vertexData;
+								+	"mul	vt2.x		vt2.x		vc3.y		\n" //meshVertexData.multipy(meshTransform.scale);
+								+	"mul	vt2.y		vt2.y		vc3.x		\n" //meshVertexData.multipy(meshTransform.scale);
+								+	"add	vt0.y		vt2.x		vt2.y		\n" //meshVertexData.multipy(meshTransform.scale);
+									
 								+	"mul	vt0.xy		vt0.xy		vc2.zw		\n" //meshVertexData.multipy(meshTransform.scale);
 								+	"sub	vt0.xy		vt0.xy		vc0.xy		\n" //meshVertexData.sub(cameraTransform.position);
 								+	"add	vt0.xy		vt0.xy		vc2.xy		\n" //meshVertexData.add(meshTransform.position);

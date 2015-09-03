@@ -4,11 +4,19 @@ package render2d.core.display
 	import render2d.core.geometries.Transform;
 	import render2d.core.materials.BaseMaterial;
 	import render2d.core.renderers.RenderSupport;
+	import render2d.core.renderers.SamplerData;
+	import render2d.core.shading.AbstractShader;
 	
 	public class Renderable extends Transform
 	{
 		public var material:BaseMaterial;
 		public var geometry:BaseGeometry;
+		
+		public var samplerData:SamplerData;
+		
+		public var shader:AbstractShader;
+		
+		public var visible:Boolean = false;
 		
 		public function Renderable() 
 		{
@@ -17,19 +25,12 @@ package render2d.core.display
 		
 		public function render(renderSupport:RenderSupport):void
 		{
+			if (shader)
+			{
+				renderSupport.setProgram(shader.program);
+			}
+				
 			renderSupport.drawRenderable(this);
-		}
-		
-		public var visible:Boolean = false;
-		
-		public function get width():Number
-		{
-			return Math.abs(geometry.minX - geometry.maxX);
-		}
-		
-		public function get height():Number
-		{
-			return Math.abs(geometry.minY - geometry.maxY);
 		}
 	}
 }

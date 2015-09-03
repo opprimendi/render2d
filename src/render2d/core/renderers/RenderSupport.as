@@ -1,8 +1,11 @@
 package render2d.core.renderers 
 {
 	import flash.display3D.Context3D;
+	import flash.display3D.Context3DMipFilter;
 	import flash.display3D.Context3DProfile;
 	import flash.display3D.Context3DProgramType;
+	import flash.display3D.Context3DTextureFilter;
+	import flash.display3D.Context3DWrapMode;
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.Program3D;
 	import flash.display3D.textures.TextureBase;
@@ -12,6 +15,7 @@ package render2d.core.renderers
 	import render2d.core.geometries.BaseGeometry;
 	import render2d.core.materials.BaseMaterial;
 	import render2d.core.renderers.debug.RendererDebugData;
+	import avm2.intrinsics.memory.li32;
 	
 	public class RenderSupport 
 	{
@@ -38,9 +42,13 @@ package render2d.core.renderers
 		private var currentTexture:TextureBase;
 		private var currentProgram:Program3D;
 		
+		private var samplerData:SamplerData;
+		
 		public function RenderSupport(context3D:Context3D) 
 		{
 			this.context3D = context3D;
+			
+			setSamplerStateAt(0, new SamplerData());
 			
 			rendererDebugData.profile = context3D.profile;
 			rendererDebugData.driver = context3D.driverInfo;
@@ -51,11 +59,11 @@ package render2d.core.renderers
 				maxFragmentConstants = 28;
 				maxAgalVersion = 1;
 			}
-			else if (context3D.profile == Context3DProfile.STANDARD_CONSTRAINED)
+			else if (context3D.profile == Context3DProfile.STANDARD_CONSTRAINED || context3D.profile == Context3DProfile.STANDARD)
 			{
 				maxVertexConstants = 250;
 				maxFragmentConstants = 64;
-				maxAgalVersion = 2;
+				maxAgalVersion = 1;
 			}
 			
 			freeVertexConstants = maxVertexConstants;
@@ -67,6 +75,12 @@ package render2d.core.renderers
 			var material:BaseMaterial = renderable.material;
 			var texture:TextureBase = material.texture;
 			var geom:BaseGeometry = renderable.geometry;
+			
+			//trace('draw renderable');
+			setSamplerStateAt(0, renderable.samplerData);
+			
+			//rendererDebugData.materialsUsed = 1;
+			//rendererDebugData.geometriesCount = 1;
 			
 			if (currentMaterial == null || currentMaterial.texture != material.texture)
 				setMaterial(material);
@@ -82,8 +96,23 @@ package render2d.core.renderers
 			drawTriangles(geom.indexBuffer);
 		}
 		
+		private function setSamplerStateAt(samplerIndex:int, newSamplerData:SamplerData):void 
+		{
+			if (newSamplerData == null)
+				return;
+			
+			if (samplerData == null || !SamplerData.isEqual(samplerData, newSamplerData))
+			{
+				//trace('set sampler state', newSamplerData);
+				this.samplerData = newSamplerData;
+				context3D.setSamplerStateAt(samplerIndex, samplerData.wrapMode, samplerData.filter, samplerData.mipFilter);
+				rendererDebugData.stateChanges++;
+			}
+		}
+		
 		private function setGeometry(geom:BaseGeometry):void 
 		{
+			//trace('set geometry');
 			rendererDebugData.geometriesCount++;
 			currentGeometry = geom;
 			geom.render(this);
@@ -91,6 +120,7 @@ package render2d.core.renderers
 		
 		public function setMaterial(material:BaseMaterial):void
 		{
+			//trace('set material');
 			currentMaterial = material;
 			material.render(context3D);
 			
@@ -104,8 +134,8 @@ package render2d.core.renderers
 		{
 			context3D.drawTriangles(indexBuffer, firstIndex, numTriangles);
 			
-			freeFragmentConstants = maxFragmentConstants;
-			freeVertexConstants = maxVertexConstants;
+			//freeFragmentConstants = maxFragmentConstants;
+			//freeVertexConstants = maxVertexConstants;
 			
 			//CONFIG::debug
 			//{
@@ -115,6 +145,7 @@ package render2d.core.renderers
 		
 		public function present():void
 		{
+			//trace('present');
 			context3D.present();
 		}
 		
@@ -159,11 +190,29 @@ package render2d.core.renderers
 			return context3D.createIndexBuffer(length);
 		}
 		
-		public function uploadVertexBuffer(vertexBuffer:VertexBuffer3D, vertices:Vector.<Number>, offset:int, length:int):void 
+		public function uploadVertexBufferFromByteArray(vertexBuffer:VertexBuffer3D, vertices:ByteArray, offset:int, length:int):void 
 		{
 			rendererDebugData.vertexBuffersUpload++;
 			rendererDebugData.stateChanges++;
 			
+			trace(vertices.bytesAvailable);
+			var k:int = 0;
+			for (var i:int = 0; i < vertices.length; )
+			{
+				trace(k, vertices[i++], vertices[i++], vertices[i++], vertices[i++]);
+				k++;
+			}
+			
+			trace("II", i, length);
+			
+			
+			vertexBuffer.uploadFromByteArray(vertices, 0, offset, length);
+		}
+		
+		public function uploadVertexBuffer(vertexBuffer:VertexBuffer3D, vertices:Vector.<Number>, offset:int, length:int):void 
+		{
+			rendererDebugData.vertexBuffersUpload++;
+			rendererDebugData.stateChanges++;
 			vertexBuffer.uploadFromVector(vertices, offset, length);
 		}
 		
@@ -171,7 +220,6 @@ package render2d.core.renderers
 		{
 			rendererDebugData.indexBuffersUpload++;
 			rendererDebugData.stateChanges++;
-			
 			indexBuffer.uploadFromVector(indecis, offset, length);
 		}
 		
@@ -195,11 +243,25 @@ package render2d.core.renderers
 		
 		public function setProgram(program:Program3D):void 
 		{
-			if (currentProgram == program)
+			if (program == null || currentProgram == program)
 				return;
-			
+				
+			//trace('set program', program);
+			currentProgram = program;
 			rendererDebugData.stateChanges++;
 			context3D.setProgram(program);
+		}
+		
+		public function disposeIndexBuffer(indexBuffer:IndexBuffer3D):void 
+		{
+			indexBuffer.dispose();
+			rendererDebugData.indexBuffersCreated--;
+		}
+		
+		public function disposeVertexBuffer(vertexBuffer:VertexBuffer3D):void 
+		{
+			vertexBuffer.dispose();
+			rendererDebugData.vertexBuffersCreated--;
 		}
 		
 	}

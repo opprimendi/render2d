@@ -61,9 +61,22 @@ package render2d.core.display
 			renderablesList.push(renderable);
 		}
 		
+		private var zzz:Number = 0;
 		override public function render(renderSupport:RenderSupport):void 
 		{
-			//currentColor = 0; for debug draw calls
+			var numRenderables:int = renderablesList.length;
+			geometry.verticesCount = 0;
+			geometry.trianglesCount = 0;
+			
+			if (numRenderables == 0)
+				return;
+				
+			renderSupport.rendererDebugData.materialsUsed++;
+			renderSupport.rendererDebugData.geometriesCount++;
+			
+			zzz += 0.01;
+			
+			//currentColor = 0; //for debug draw calls
 			//trace(geometry.indecis);
 			//trace(geometry.vertices);
 			//trace(orderBufferData);
@@ -78,40 +91,60 @@ package render2d.core.display
 			
 			var isNeedFinalRender:Boolean = true;
 			var k:int = 0;
+			var transform:Vector.<Number>;
 			var registerIndex:int = 0;
-			for (var i:int = 0; i < renderablesList.length; i++)
+			for (var i:int = 0; i < numRenderables; i++)
 			{
 				isNeedFinalRender = true;
 				
 				var renderable:Renderable = renderablesList[i];
 				
-				constantsVector[registerIndex++] = renderable.transformData[0];
-				constantsVector[registerIndex++] = renderable.transformData[1];
-				constantsVector[registerIndex++] = renderable.transformData[2];
-				constantsVector[registerIndex++] = renderable.transformData[3];
-				constantsVector[registerIndex++] = renderable.transformData[4];
-				constantsVector[registerIndex++] = renderable.transformData[5];
-				constantsVector[registerIndex++] = renderable.transformData[6];
-				constantsVector[registerIndex++] = renderable.transformData[7];
+				//var addx:Number = Math.cos(zzz * 3 + i);
+				//var addy:Number = Math.sin(zzz * 3 + i);
+				
+				//renderable.x += addx;
+				//renderable.y -= addy;
+				//renderable.scaleX = addx * 10;
+				//renderable.scaleY = addx * 10;
+				transform = renderable.transformData;
+				
+				constantsVector[registerIndex++] = transform[0];
+				constantsVector[registerIndex++] = transform[1];
+				constantsVector[registerIndex++] = transform[2];
+				constantsVector[registerIndex++] = transform[3];
+				constantsVector[registerIndex++] = transform[4];
+				constantsVector[registerIndex++] = transform[5];
+				constantsVector[registerIndex++] = transform[6];
+				constantsVector[registerIndex++] = transform[7];
 				
 				k++;
 				
 				if (k == maxRenderables)
 				{
 					isNeedFinalRender = false;
+					
 					renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, constantsVector, k * 2);
+					geometry.verticesCount = k * 8;
+					geometry.trianglesCount = k * 2;
+					
 					//setNextColor(renderSupport);
 					renderSupport.drawRenderable(this);
 					
-					registerIndex = 0;
+					//renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4 + k * 2, identityVector, (maxRenderables - k) * 2); //clean unused registers
 					
+					registerIndex = 0;
 					k = 0;
 				}
 			}
 			
 			if (isNeedFinalRender)
 			{
-				renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, constantsVector, k * 2);
+				
+				renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4 + k * 2, identityVector, (maxRenderables - k) * 2); //clean unused registers
+				renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, constantsVector, k * 2); //fill registers to use
+				geometry.verticesCount = k * 8;
+				geometry.trianglesCount = k * 2;
+				
 				//setNextColor(renderSupport);
 				renderSupport.drawRenderable(this);
 			}
@@ -119,11 +152,21 @@ package render2d.core.display
 			constantsVector = new Vector.<Number>(maxUsedRegisters, true);
 			
 			renderSupport.setVertexBufferAt(2, null, 0, Context3DVertexBufferFormat.FLOAT_1);
-			renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, constantsVector, maxRenderables * 2);
+			renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, identityVector, k * 2); //clean only last used registers
+		}
+		
+		public function shift():void 
+		{
+			renderablesList.shift();
+		}
+		
+		public function pop():void 
+		{
+			renderablesList.pop();
 		}
 		
 		private var currentColor:int = 0;
-		private var colors:Vector.<int> = new <int>[0xFF0000, 0x00FF00, 0x0000FF, 0xFF00FF];
+		private var colors:Vector.<int> = new <int>[0xFF0000, 0x00FF00, 0x0000FF, 0xFF00FF, 0xFFFF00, 0x00FFFF, 0xFFFFFF, 0xCCCCCC];
 		private var fragmentColorBuffer:Vector.<Number> = new Vector.<Number>(4, true);
 		
 		/**
@@ -144,6 +187,16 @@ package render2d.core.display
 			renderSupport.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, fragmentColorBuffer, 1);
 			
 			currentColor++;
+		}
+		
+		private function cleanColor(renderSupport:RenderSupport):void
+		{
+			fragmentColorBuffer[0] = 0;
+			fragmentColorBuffer[1] = 0;
+			fragmentColorBuffer[2] = 0;
+			fragmentColorBuffer[3] = 0;
+			
+			renderSupport.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, fragmentColorBuffer, 1);
 		}
 
 		[Inline]
