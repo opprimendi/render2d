@@ -18,14 +18,14 @@ package render2d.core.renderers
 		public var batchShader:BatchShader = new BatchShader();
 		
 		private var fragmentColorBuffer:Vector.<Number> = new Vector.<Number>(4, true);
-		private var currentFragmentColorBuffer:Vector.<Number> = new Vector.<Number>(4, true);
+		public var currentFragmentColorBuffer:Vector.<Number> = new Vector.<Number>(4, true);
 		
 		public var renderSupport:RenderSupport;
 		
 		public function BasicRenderer(context3D:Context3D) 
 		{
 			this.context3D = context3D;
-			context3D.enableErrorChecking = false;
+			context3D.enableErrorChecking = true;
 			
 			renderSupport = new RenderSupport(context3D);
 			

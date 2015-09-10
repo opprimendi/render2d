@@ -16,9 +16,15 @@ package render2d.core.renderers
 	import render2d.core.materials.BaseMaterial;
 	import render2d.core.renderers.debug.RendererDebugData;
 	import avm2.intrinsics.memory.li32;
+	import render2d.core.shading.AbstractShader;
 	
 	public class RenderSupport 
 	{
+		private var fragmentColorBuffer:Vector.<Number> = new Vector.<Number>(4, true);
+		public var currentFragmentColorBuffer:Vector.<Number> = new Vector.<Number>(4, true);
+		
+		
+		
 		public var rendererDebugData:RendererDebugData = new RendererDebugData();
 		
 		private var maxVertexBuffers:int = 4096;
@@ -79,10 +85,14 @@ package render2d.core.renderers
 			//trace('draw renderable');
 			setSamplerStateAt(0, renderable.samplerData);
 			
+			setShader(renderable.shader);
+			
 			//rendererDebugData.materialsUsed = 1;
 			//rendererDebugData.geometriesCount = 1;
 			
-			if (currentMaterial == null || currentMaterial.texture != material.texture)
+			//trace(material.texture, renderable);
+			
+			if (material.texture != null && (currentMaterial == null || currentMaterial.texture != material.texture))
 				setMaterial(material);
 				
 			if (currentGeometry != geom)
@@ -92,6 +102,32 @@ package render2d.core.renderers
 			rendererDebugData.trianglesCount += geom.trianglesCount;
 			
 			setProgramConstantsFromVector(Context3DProgramType.VERTEX, 2, renderable.transformData, 2);
+			
+			if (renderable.material.useColor)
+			{
+				fragmentColorBuffer[0] = renderable.material.r;
+				fragmentColorBuffer[1] = renderable.material.g;
+				fragmentColorBuffer[2] = renderable.material.b;
+				fragmentColorBuffer[3] = renderable.material.a;
+			}
+			else
+			{
+				fragmentColorBuffer[0] = 0;
+				fragmentColorBuffer[1] = 0;
+				fragmentColorBuffer[2] = 0;
+				fragmentColorBuffer[3] = 0;
+			}
+			
+			if (fragmentColorBuffer[0] != currentFragmentColorBuffer[0] || fragmentColorBuffer[1] != currentFragmentColorBuffer[1] || 
+					fragmentColorBuffer[2] != currentFragmentColorBuffer[2] || fragmentColorBuffer[3] != currentFragmentColorBuffer[3])
+					{
+						currentFragmentColorBuffer[0] = fragmentColorBuffer[0];
+						currentFragmentColorBuffer[1] = fragmentColorBuffer[1];
+						currentFragmentColorBuffer[2] = fragmentColorBuffer[2];
+						currentFragmentColorBuffer[3] = fragmentColorBuffer[3];
+						
+						setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, fragmentColorBuffer, 1);
+					}
 				
 			drawTriangles(geom.indexBuffer);
 		}
@@ -241,9 +277,17 @@ package render2d.core.renderers
 			return context3D.createProgram();
 		}
 		
+		public function setShader(shader:AbstractShader):void
+		{
+			if (shader == null)
+				return;
+				
+			setProgram(shader.program);
+		}
+		
 		public function setProgram(program:Program3D):void 
 		{
-			if (program == null || currentProgram == program)
+			if (currentProgram == program)
 				return;
 				
 			//trace('set program', program);

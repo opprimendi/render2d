@@ -4,10 +4,13 @@ package render2d.core.display
 	import flash.display3D.Context3DVertexBufferFormat;
 	import flash.display3D.VertexBuffer3D;
 	import render2d.core.geometries.BaseGeometry;
+	import render2d.core.materials.BaseMaterial;
 	import render2d.core.renderers.RenderSupport;
 	
 	public class BatchedLayer extends Renderable 
 	{
+		public var debugMaterial:BaseMaterial;
+		
 		private var renderablesList:Vector.<Renderable> = new Vector.<Renderable>;
 		
 		private var orderBuffer:VertexBuffer3D;
@@ -71,10 +74,10 @@ package render2d.core.display
 			if (numRenderables == 0)
 				return;
 				
-			renderSupport.rendererDebugData.materialsUsed++;
-			renderSupport.rendererDebugData.geometriesCount++;
+			//renderSupport.rendererDebugData.materialsUsed++;
+			//renderSupport.rendererDebugData.geometriesCount++;
 			
-			zzz += 0.01;
+			//zzz += 0.01;
 			
 			//currentColor = 0; //for debug draw calls
 			//trace(geometry.indecis);
@@ -93,6 +96,8 @@ package render2d.core.display
 			var k:int = 0;
 			var transform:Vector.<Number>;
 			var registerIndex:int = 0;
+			var b:Boolean = false;
+			var drw:int = 0;
 			for (var i:int = 0; i < numRenderables; i++)
 			{
 				isNeedFinalRender = true;
@@ -102,20 +107,18 @@ package render2d.core.display
 				//var addx:Number = Math.cos(zzz * 3 + i);
 				//var addy:Number = Math.sin(zzz * 3 + i);
 				
-				//renderable.x += addx;
-				//renderable.y -= addy;
-				//renderable.scaleX = addx * 10;
-				//renderable.scaleY = addx * 10;
-				transform = renderable.transformData;
+				//if (i % 2 == 0)
+				//{
+				//	renderable.x += addx;
+				//	renderable.y -= addy;
+				//	renderable.scaleX = addx * 10;
+				//	renderable.scaleY = addx * 10;
+				//}
 				
-				constantsVector[registerIndex++] = transform[0];
-				constantsVector[registerIndex++] = transform[1];
-				constantsVector[registerIndex++] = transform[2];
-				constantsVector[registerIndex++] = transform[3];
-				constantsVector[registerIndex++] = transform[4];
-				constantsVector[registerIndex++] = transform[5];
-				constantsVector[registerIndex++] = transform[6];
-				constantsVector[registerIndex++] = transform[7];
+				//renderable.rotationX += addx+addy + i;
+				
+				renderable.copyTransformTo(constantsVector, registerIndex);
+				registerIndex += 8;
 				
 				k++;
 				
@@ -127,7 +130,20 @@ package render2d.core.display
 					geometry.verticesCount = k * 8;
 					geometry.trianglesCount = k * 2;
 					
-					//setNextColor(renderSupport);
+				
+					
+					//if (drw % 3 == 0)
+					//{
+					//	var mb:BaseMaterial = this.material;
+					//	this.material = debugMaterial;
+					//	this.debugMaterial = mb;
+						
+					//	setNextColor(renderSupport, true);
+					//}
+					//else
+					//	setNextColor(renderSupport);
+						
+					//drw++;
 					renderSupport.drawRenderable(this);
 					
 					//renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4 + k * 2, identityVector, (maxRenderables - k) * 2); //clean unused registers
@@ -149,7 +165,7 @@ package render2d.core.display
 				renderSupport.drawRenderable(this);
 			}
 			
-			constantsVector = new Vector.<Number>(maxUsedRegisters, true);
+			//constantsVector = new Vector.<Number>(maxUsedRegisters, true);
 			
 			renderSupport.setVertexBufferAt(2, null, 0, Context3DVertexBufferFormat.FLOAT_1);
 			renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, identityVector, k * 2); //clean only last used registers
@@ -172,17 +188,27 @@ package render2d.core.display
 		/**
 		 * For debug drawing reason
 		 */
-		private function setNextColor(renderSupport:RenderSupport):void
+		private function setNextColor(renderSupport:RenderSupport, colorr:Boolean = false):void
 		{
 			if (currentColor == colors.length)
 				currentColor = 0;
 			
 			var color:int = colors[currentColor];
 			
-			fragmentColorBuffer[0] = extractRed(color) / 255;
-			fragmentColorBuffer[1] = extractGreen(color) / 255;
-			fragmentColorBuffer[2] = extractBlue(color) / 255;
-			fragmentColorBuffer[3] = 1;
+			if (colorr)
+			{
+				fragmentColorBuffer[0] = 0;
+				fragmentColorBuffer[1] = 0;
+				fragmentColorBuffer[2] = 0;
+				fragmentColorBuffer[3] = 0;
+			}
+			else
+			{
+				fragmentColorBuffer[0] = extractRed(color) / 255;
+				fragmentColorBuffer[1] = extractGreen(color) / 255;
+				fragmentColorBuffer[2] = extractBlue(color) / 255;
+				fragmentColorBuffer[3] = 1;
+			}
 			
 			renderSupport.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, fragmentColorBuffer, 1);
 			
@@ -215,6 +241,11 @@ package render2d.core.display
 		private static function extractBlue(c:uint):int 
 		{
 			return ( c & 0xFF );
+		}
+		
+		override public function toString():String 
+		{
+			return "[BatchedLayer]";
 		}
 	}
 

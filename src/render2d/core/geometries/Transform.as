@@ -72,6 +72,18 @@ package render2d.core.geometries
 			return _transformData;
 		}
 		
+		public function copyTransformTo(constantsVector:Vector.<Number>, registerIndex:int):void 
+		{
+			constantsVector[registerIndex++] = x;
+			constantsVector[registerIndex++] = -y;
+			
+			constantsVector[registerIndex++] = scaleX;
+			constantsVector[registerIndex++] = -scaleY;
+			
+			constantsVector[registerIndex++] = Math.cos(FastMath.convertToRadian(_rotationX));
+			constantsVector[registerIndex++] = Math.sin(FastMath.convertToRadian(_rotationX));
+		}
+		
 		public function identity():void 
 		{
 			//_transformData[0] = x;

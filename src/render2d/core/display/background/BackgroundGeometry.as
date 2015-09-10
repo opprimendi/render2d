@@ -19,13 +19,20 @@ package render2d.core.display.background
 		
 		private function construct():void 
 		{
-			setVertexAndUv(0, width * -0.5,  height * -0.5, 0, 0);
-			setVertexAndUv(1, width *  0.5,  height * -0.5, 1, 0);
-			setVertexAndUv(2, width *  0.5,  height *  0.5, 1, 1);
-			setVertexAndUv(3, width * -0.5,  height *  0.5, 0, 1);
+			//setVertexAndUv(0, width * -0.5,  height * -0.5, 	-0.5, 	-0.5);
+			//setVertexAndUv(1, width *  0.5,  height * -0.5, 	 0.5, 	-0.5);
+			//setVertexAndUv(2, width *  0.5,  height *  0.5, 	 0.5, 	 0.5);
+			//setVertexAndUv(3, width * -0.5,  height *  0.5, 	-0.5, 	 0.5);
+			
+			setVertexAndUv(0, width * -0.5,  height * -0.5, 	-0.1, 	-0.1);
+			setVertexAndUv(1, width *  0.5,  height * -0.5, 	 0.1, 	-0.1);
+			setVertexAndUv(2, width *  0.5,  height *  0.5, 	 0.1, 	 0.1);
+			setVertexAndUv(3, width * -0.5,  height *  0.5, 	-0.1, 	 0.1);
 		
 			setTriangle(0, 0, 1, 2);
 			setTriangle(1, 0, 2, 3);
+			
+			
 		}
 		
 	}

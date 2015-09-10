@@ -9,11 +9,13 @@ package render2d.core.shading
 																					//Matrix3D meshTransform = vc2;
 									"mov	vt0 		va0						\n" //Vec2[] meshVertexData = mesh.vertexData;
 								+	"mov	vt1.xy		vc0.zw					\n" //Vec2 cameraScale = cameraTransform.scale;
-								+	"abs	vt1.y		vt1.y					\n"	//cameraScale.y = Math.abs(cameraScale.y);
-								+	"mul	vt0.xy		vt0.xy		vt1.xy		\n" //meshVertexData.multipy(cameraScale);
+								//+	"abs	vt1.y		vt1.y					\n"	//cameraScale.y = Math.abs(cameraScale.y);
+								//+	"mul	vt0.xy		vt0.xy		vt1.xy		\n" //meshVertexData.multipy(cameraScale);
 								+	"mul	vt0.xy		vt0.xy		vc1.w		\n" //meshVertexData.multipy(cameraTransform.screenSpaceRatio);
 								+	"mov	vt2			va1						\n" //Vec2[] uvData = mesh.uvData;
 								+	"mov	vt3			vc0						\n" //Vec4[] cameraTransformBuffer = cameraTransform.clone();
+								+	"div	vt2.xy		vt2.xy		vt1.xy		\n" //meshVertexData.multipy(cameraScale);
+								//+	"sub	vt2.x		vt2.x		vt3.z		\n" //meshVertexData.multipy(cameraScale);
 								+	"mul	vt3 		vt3			vc2.zw		\n" //cameraTransformBuffer.multiplu(meshTransform.scale);
 								+	"add	vt2 		vt2			vt3.xy		\n" //uvData.add(cameraTransform.position);
 								+	"mov	v0	 		vt2						\n" //copy uvData to v1

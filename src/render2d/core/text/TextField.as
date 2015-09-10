@@ -28,6 +28,11 @@ package render2d.core.text
 			}
 		}
 		
+		override public function toString():String 
+		{
+			return "[TextField]";
+		}
+		
 		[Inline]
 		private static function extractRed(c:uint):int 
 		{
@@ -52,7 +57,7 @@ package render2d.core.text
 			material.r = extractRed(color)/255;
 			material.g = extractGreen(color)/255;
 			material.b = extractBlue(color)/255;
-			material.a = 1;
+			material.a = 2;
 		}
 		
 		public function clone():TextField
