@@ -69,11 +69,14 @@ package render2d.core.display
 				
 				var geometry:BaseGeometry = renderable.geometry;
 				
-				if (renderable.x + geometry.maxX < minX || renderable.x + geometry.minX > maxX)
-					continue;
-					
-				if (renderable.y + geometry.maxY < minY || renderable.y + geometry.minY > maxY)
-					continue;
+				if (!(renderable is FPSCount))
+				{
+					if (renderable.x + geometry.maxX < minX || renderable.x + geometry.minX > maxX)
+						continue;
+						
+					if (renderable.y + geometry.maxY < minY || renderable.y + geometry.minY > maxY)
+						continue;
+				}
 				
 				toRenderList[toRenderCount] = renderable;
 				toRenderCount++;

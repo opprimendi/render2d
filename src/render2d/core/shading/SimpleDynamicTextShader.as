@@ -1,8 +1,8 @@
 package render2d.core.shading 
 {
-	public class BatchShader extends AssemblerShader
+	public class SimpleDynamicTextShader extends AssemblerShader
 	{
-		public function BatchShader() 
+		public function SimpleDynamicTextShader() 
 		{
 			vertexData = 															
 																					
@@ -29,35 +29,21 @@ package render2d.core.shading
 								//				Define mesh data					//
 									ShaderStd.SET_MESH_VERTEX_DATA 					//VertexData meshVertexData = mesh;
 								+	"mov	vt2 		vc[va2.x]				\n" //Transform meshTransform = vc[meshIndex];
-								+	"mov	vt4 		vc[va2.x+1]				\n" //Rotation meshRotation = vc[meshIndex+1];
-								//				Rotation
-								//				float xnew = p.x * cos - p.y * sin;
-								//				float ynew = p.x * sin + p.y * cos;
-								+	"mov	vt3 		va0					    \n" //VertexData meshVertexData2 = mesh;
-								+	"mul	vt3.x		vt3.x		vt4.x		\n" //meshVertexData2.x *= meshRotation.rotatioX.x;
-								+	"mul	vt3.y		vt3.y		vt4.y		\n" //meshVertexData2.y *= meshRotation.rotatioX.y;
-								+	"sub	vt0.x		vt3.x		vt3.y		\n" //meshVertexData.x = meshVertexData2.x - meshVertexData2.y;
-								
-								
-								+	"mov	vt3 		va0						\n" //meshVertexData2 = mesh;
-								+	"mul	vt3.x		vt3.x		vt4.y		\n" //meshVertexData2.x *= meshRotation.rotatioX.y;
-								+	"mul	vt3.y		vt3.y		vt4.x		\n" //meshVertexData2.y *= meshRotation.rotatioX.x;
-								+	"add	vt0.y		vt3.x		vt3.y		\n" //meshVertexData.x = meshVertexData2.x + meshVertexData2.y;
-								
 								
 								//				Add local and global mesh transform to mesh vertices
-								//+	"mov	vt2 		vc4						\n" //Vec2[] meshVertexData = mesh.vertexData;
-								+	"mul	vt0.xy		vt0.xy		vt2.zw		\n" //meshVertexData.multipy(meshTransform.scale); 					//scale mesh vertices by mesh local scale
-								+	"sub	vt0.xy		vt0.xy		vc0.xy		\n" //meshVertexData.sub(cameraTransform.position); 				//apply camera position to mesh vertices
+								
+								+	"abs	vt2.w		vt2.w					\n" //meshVertexData.multipy(meshTransform.scale); 					//scale mesh vertices by mesh local scale
+								+	"mul	vt0.y		vt0.y		vt2.w		\n" //meshVertexData.multipy(meshTransform.scale); 					//scale mesh vertices by mesh local scale
 								+	"add	vt0.xy		vt0.xy		vt2.xy		\n" //meshVertexData.add(meshTransform.position);					//add global mesh psotion to mesh vertices
-								+	"mov	vt1.xy		vc0.zw					\n" //Scale cameraScale = cameraTransform.scale;
-								+	"abs	vt1.y		vt1.y					\n"	//cameraScale.y = Math.abs(cameraScale.y);						//because camera behing scene :E by default
-								+	"mul	vt0.xy		vt0.xy		vt1.xy		\n" //meshVertexData.multipy(cameraScale);							//apply camera scale(zoom) to mesh vertices
+								+	"mul	vt0.xy		vt0.xy		vc2.zw		\n" //add container scale
+								+	"add	vt0.xy		vt0.xy		vc2.xy		\n" //add container position
+								
 								+	ShaderStd.CREEN_SPACE_RATIO 					//meshVertexData.multipy(cameraTransform.screenSpaceRatio);		//apply screen space ration to mesh vertices(1 pixel in backbufer is have different size bacause it based on backbufer w, h. In backbuffer coordinates is -1 - 1 not the w, h passed in configure back buffer
 								+	"mov	v0, 		va1						\n" //copy uvData to v1
 								+	"mov	op,			vt0						  ";//copy meshVertexData to output
 								
-			fragmentData = 			//anisotropic2x												 		//pixel(Vec2 position, TextureFillModel fillMode, TextureSampler sampler, MipMapSampler mipSampler, Number bias)
+			fragmentData = 			//anisotropic2x			
+										
 										"tex ft0, v0, fs0 <ignoresampler>\n"//<2d,repeat,anisotropic4x,miplinear> \n" //Pixel pixel = texture.getPixelAt(fs0, TextureFillModel.WRAP, TextureSampler.LINEAR, MipMapSampler.LINEAR, -0.5
 									//+	"add ft0, v0, ft0 \n"
 									//+	"div ft0, v0, ft0 \n"

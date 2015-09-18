@@ -37,6 +37,8 @@ package render2d.core.renderers
 			batchShader.create(renderSupport);
 			batchShader.compile();
 			batchShader.upload(renderSupport);
+			
+			
 		}
 		
 		public function configure(width:Number, height:Number, maxWidth:Number, maxHeight:Number):void
@@ -48,6 +50,8 @@ package render2d.core.renderers
 			this.context3D.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
 			//context3D.setCulling(Context3DTriangleFace.FRONT);
 			
+			renderSupport.clear();
+			renderSupport.present();
 		}
 		
 		public function setCamera(camera:Camera):void

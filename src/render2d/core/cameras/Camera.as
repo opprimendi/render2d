@@ -23,8 +23,8 @@ package render2d.core.cameras
 			halfWidth = width / 2;
 			halfHeiight = height / 2;
 			
-			screenSpaceRatio = 1 / ((_width + _height) / 4);
-			//aspectRatio = height / width;
+			hScreenSpaceRatio = 1 / height * 2;
+			wScreenSpaceRatio = 1 / width * 2;
 		}
 		
 		public function get minX():Number
@@ -47,22 +47,22 @@ package render2d.core.cameras
 			return y + halfHeiight / scaleY;
 		}
 		
-		public function get aspectRatio():Number 
+		public function get wScreenSpaceRatio():Number 
 		{
 			return transformData[6];
 		}
 		
-		public function set aspectRatio(value:Number):void 
+		public function set wScreenSpaceRatio(value:Number):void 
 		{
 			transformData[6] = value;
 		}
 		
-		public function get screenSpaceRatio():Number 
+		public function get hScreenSpaceRatio():Number 
 		{
 			return transformData[7];
 		}
 		
-		public function set screenSpaceRatio(value:Number):void 
+		public function set hScreenSpaceRatio(value:Number):void 
 		{
 			transformData[7] = value;
 		}

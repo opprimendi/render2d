@@ -181,7 +181,7 @@ package render2d.core.text
         }
 
         /** Draws text into a Geometry. */
-        public function fillBatched(data:Vector.<Number>, indices:Vector.<uint>, geometryWidth:Number, geometryHeight:Number, text:String,
+        public function fillBatched( data:Vector.<Number>, indices:Vector.<uint>, geometryWidth:Number, geometryHeight:Number, text:String,
                                       fontSize:Number=-1,
                                       hAlign:int=HAlign.CENTER, vAlign:int=VAlign.CENTER,
                                       autoScale:Boolean=true, 
@@ -190,25 +190,27 @@ package render2d.core.text
             var charLocations:Vector.<CharLocation> = arrangeChars(geometryWidth, geometryHeight, text, fontSize, 
                                                                    hAlign, vAlign, autoScale, kerning);
 
-			data.length = 0;
-			indices.length = 0;
-
-			var k:int = 0;
-			var indicesCount:int = 0;
+			//data.length = 0;
+			//indices.length = 0;
+			var k:int = data.length;
+			var indicesCount:int = indices.length;
             var numChars:int = charLocations.length;
 			
 			var width:Number;
 			var height:Number;
 			
+			var indicesStep:int = (indicesCount) / 6;
             for (var i:int=0; i<numChars; ++i)
             {
-				indices[indicesCount++] = i*4;
-				indices[indicesCount++] = i*4+1;
-				indices[indicesCount++] = i*4+2;
+				indices[indicesCount++] = indicesStep*4;
+				indices[indicesCount++] = indicesStep*4+1;
+				indices[indicesCount++] = indicesStep*4+2;
 
-				indices[indicesCount++] = i*4;
-				indices[indicesCount++] = i*4+2;
-				indices[indicesCount++] = i*4+3;
+				indices[indicesCount++] = indicesStep*4;
+				indices[indicesCount++] = indicesStep*4+2;
+				indices[indicesCount++] = indicesStep * 4 + 3;
+				
+				indicesStep++;
 
                 var charLocation:CharLocation = charLocations[i];
 				

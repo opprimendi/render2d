@@ -25,11 +25,6 @@ package render2d.core.display
 		
 		public function render(renderSupport:RenderSupport):void
 		{
-			if (shader)
-			{
-				renderSupport.setProgram(shader.program);
-			}
-				
 			renderSupport.drawRenderable(this);
 		}
 		

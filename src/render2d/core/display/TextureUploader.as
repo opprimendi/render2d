@@ -42,7 +42,7 @@ package render2d.core.display
 		public function uploadTexture(textureSource:BitmapData):Texture 
 		{
 			var mipLevel:int = FastMath.log(textureSource.width, 2);
-			var texture:Texture = context3D['createTexture'](textureSource.width, textureSource.height, textureSource.transparent? Context3DTextureFormat.BGRA_PACKED:Context3DTextureFormat.BGR_PACKED, false, mipLevel);
+			var texture:Texture = context3D.createTexture(textureSource.width, textureSource.height, textureSource.transparent? Context3DTextureFormat.BGRA:Context3DTextureFormat.BGRA, false, mipLevel);
 			
 			var textureUploadData:TextureUploaderData = new TextureUploaderData();
 			textureUploadData.currentMipLevel = mipLevel;

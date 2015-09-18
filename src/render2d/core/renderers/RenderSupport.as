@@ -11,6 +11,7 @@ package render2d.core.renderers
 	import flash.display3D.textures.TextureBase;
 	import flash.display3D.VertexBuffer3D;
 	import flash.utils.ByteArray;
+	import render2d.core.cameras.Camera;
 	import render2d.core.display.Renderable;
 	import render2d.core.geometries.BaseGeometry;
 	import render2d.core.materials.BaseMaterial;
@@ -48,6 +49,8 @@ package render2d.core.renderers
 		private var currentTexture:TextureBase;
 		private var currentProgram:Program3D;
 		
+		private var _camera:Camera;
+		
 		private var samplerData:SamplerData;
 		
 		public function RenderSupport(context3D:Context3D) 
@@ -76,11 +79,28 @@ package render2d.core.renderers
 			freeFragmentConstants = maxFragmentConstants;
 		}
 		
+		public function set enableErrorChecking(value:Boolean):void
+		{
+			context3D.enableErrorChecking = value;
+		}
+		
+		public function get camera():Camera 
+		{
+			return _camera;
+		}
+		
+		public function set camera(value:Camera):void 
+		{
+			_camera = value;
+		}
+		
 		public function drawRenderable(renderable:Renderable):void
 		{
 			var material:BaseMaterial = renderable.material;
 			var texture:TextureBase = material.texture;
 			var geom:BaseGeometry = renderable.geometry;
+			
+			//trace('draw renderable', renderable);
 			
 			//trace('draw renderable');
 			setSamplerStateAt(0, renderable.samplerData);
@@ -143,6 +163,7 @@ package render2d.core.renderers
 				this.samplerData = newSamplerData;
 				context3D.setSamplerStateAt(samplerIndex, samplerData.wrapMode, samplerData.filter, samplerData.mipFilter);
 				rendererDebugData.stateChanges++;
+				//trace("setSamplerStateAt");
 			}
 		}
 		
@@ -182,12 +203,18 @@ package render2d.core.renderers
 		public function present():void
 		{
 			//trace('present');
+			if(camera)
+				setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, camera.transformData, 2);
+			
 			context3D.present();
+			//trace('-----present-----');
 		}
 		
 		public function clear():void
 		{
-			context3D.clear();
+			//context3D.setColorMask(0, 0, 0, 1);
+			
+			context3D.clear(1, 1, 1, 0);
 			rendererDebugData.clear();
 			
 			freeVertexConstants = maxVertexConstants;
@@ -211,6 +238,7 @@ package render2d.core.renderers
 			}
 			
 			rendererDebugData.stateChanges++;
+			//trace("setProgramConstantsFromVector", programType);
 			context3D.setProgramConstantsFromVector(programType, firstRegister, data, numRegisters);
 		}
 		
@@ -249,6 +277,7 @@ package render2d.core.renderers
 		{
 			rendererDebugData.vertexBuffersUpload++;
 			rendererDebugData.stateChanges++;
+			//trace("uploadVertexBuffer");
 			vertexBuffer.uploadFromVector(vertices, offset, length);
 		}
 		
@@ -256,12 +285,14 @@ package render2d.core.renderers
 		{
 			rendererDebugData.indexBuffersUpload++;
 			rendererDebugData.stateChanges++;
+			//trace("uploadIndexBuffer");
 			indexBuffer.uploadFromVector(indecis, offset, length);
 		}
 		
 		public function setVertexBufferAt(index:int, vertexBuffer:VertexBuffer3D, offset:int, format:String):void 
 		{
 			rendererDebugData.stateChanges++;
+			//trace("setVertexBufferAt", index);
 			context3D.setVertexBufferAt(index, vertexBuffer, offset, format);
 		}
 		
@@ -290,9 +321,9 @@ package render2d.core.renderers
 			if (currentProgram == program)
 				return;
 				
-			//trace('set program', program);
 			currentProgram = program;
 			rendererDebugData.stateChanges++;
+			//trace("setProgram");
 			context3D.setProgram(program);
 		}
 		

@@ -31,6 +31,10 @@ package render2d.core.materials
 			//}
 		}
 		
+		public function clone():BaseMaterial
+		{
+			return new BaseMaterial(texture);
+		}
 	}
 
 }

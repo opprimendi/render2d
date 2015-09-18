@@ -7,11 +7,11 @@ package render2d.core.shading
 			vertexData = 
 																					//Matrix3D cameraTransform = vc0;
 																					//Matrix3D meshTransform = vc2;
-									"mov	vt0 		va0						\n" //Vec2[] meshVertexData = mesh.vertexData;
+									ShaderStd.SET_MESH_VERTEX_DATA 					//Vec2[] meshVertexData = mesh.vertexData;
 								+	"mov	vt1.xy		vc0.zw					\n" //Vec2 cameraScale = cameraTransform.scale;
 								//+	"abs	vt1.y		vt1.y					\n"	//cameraScale.y = Math.abs(cameraScale.y);
 								//+	"mul	vt0.xy		vt0.xy		vt1.xy		\n" //meshVertexData.multipy(cameraScale);
-								+	"mul	vt0.xy		vt0.xy		vc1.w		\n" //meshVertexData.multipy(cameraTransform.screenSpaceRatio);
+								+	ShaderStd.CREEN_SPACE_RATIO 					//meshVertexData.multipy(cameraTransform.screenSpaceRatio);
 								+	"mov	vt2			va1						\n" //Vec2[] uvData = mesh.uvData;
 								+	"mov	vt3			vc0						\n" //Vec4[] cameraTransformBuffer = cameraTransform.clone();
 								+	"div	vt2.xy		vt2.xy		vt1.xy		\n" //meshVertexData.multipy(cameraScale);

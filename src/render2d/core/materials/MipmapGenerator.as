@@ -50,6 +50,12 @@ package render2d.core.materials
 				w = sourceWidth >> i;
 				h = sourceHeight >> i;
 				
+				if (w == 0)
+					w = 1;
+					
+				if (h == 0)
+					h = 1;
+				
 				//for rectangle textures
 				_rect.width = w > sourceWidth? sourceWidth:w;
 				_rect.height = h > sourceHeight? sourceHeight:h;

@@ -24,7 +24,7 @@ package render2d.core.text
 			if (isGenerateGeometry)
 			{
 				geometry = new BaseGeometry();
-				textFormat.font.fillBatched(geometry.vertices, geometry.indecis, textWidth, textHeight, text, textFormat.fontSize, textFormat.hAlign, textFormat.vAlign);
+				textFormat.font.fillBatched(geometry.vertices, geometry.indecis, textWidth, textHeight, this.text, textFormat.fontSize, textFormat.hAlign, textFormat.vAlign);
 			}
 		}
 		
@@ -33,37 +33,11 @@ package render2d.core.text
 			return "[TextField]";
 		}
 		
-		[Inline]
-		private static function extractRed(c:uint):int 
-		{
-			return (( c >> 16 ) & 0xFF);
-		}
-			 
-		[Inline]
-		private static function extractGreen(c:uint):int 
-		{
-			return ( (c >> 8) & 0xFF );
-		}
-			 
-		[Inline]
-		private static function extractBlue(c:uint):int 
-		{
-			return ( c & 0xFF );
-		}
-		
-		public function applyColor(color:int):void
-		{
-			material.useColor = true;
-			material.r = extractRed(color)/255;
-			material.g = extractGreen(color)/255;
-			material.b = extractBlue(color)/255;
-			material.a = 2;
-		}
-		
 		public function clone():TextField
 		{
 			var textField:TextField = new TextField(text, textWidth, textHeight, textFormat, false);
 			textField.geometry = this.geometry;
+			textField.shader = shader;
 			
 			return textField;
 		}
