@@ -28,6 +28,8 @@ package render2d.core.display
 			renderSupport.drawRenderable(this);
 		}
 		
+
+		
 		
 	}
 }

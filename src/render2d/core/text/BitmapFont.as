@@ -69,8 +69,8 @@ package render2d.core.text
         /** Helper objects. */
         private static var sLines:Array = [];
 		
-		private var textureWidth:Number;
-		private var textureHeight:Number;
+		public var textureWidth:Number;
+		public var textureHeight:Number;
 		private var texture:Texture;
         
         public function BitmapFont(texture:TextureBase=null, textureWidth:Number = 0, textureHeight:Number = 0, fontXml:XML=null)
@@ -202,12 +202,12 @@ package render2d.core.text
 			var indicesStep:int = (indicesCount) / 6;
             for (var i:int=0; i<numChars; ++i)
             {
-				indices[indicesCount++] = indicesStep*4;
-				indices[indicesCount++] = indicesStep*4+1;
-				indices[indicesCount++] = indicesStep*4+2;
+				indices[indicesCount++] = indicesStep * 4;
+				indices[indicesCount++] = indicesStep * 4 + 1;
+				indices[indicesCount++] = indicesStep * 4 + 2;
 
-				indices[indicesCount++] = indicesStep*4;
-				indices[indicesCount++] = indicesStep*4+2;
+				indices[indicesCount++] = indicesStep * 4;
+				indices[indicesCount++] = indicesStep * 4 + 2;
 				indices[indicesCount++] = indicesStep * 4 + 3;
 				
 				indicesStep++;
@@ -285,6 +285,7 @@ package render2d.core.text
             {
                 sLines.length = 0;
                 scale = fontSize / mSize;
+				
                 containerWidth  = width / scale;
                 containerHeight = height / scale;
                 
@@ -396,11 +397,11 @@ package render2d.core.text
                 
                 if (numChars == 0) continue;
                 
-                var xOffset:int = 0;
+                var xOffset:Number = 0;
                 var lastLocation:CharLocation = line[line.length-1];
-                var right:Number = lastLocation.x - lastLocation.char.xOffset 
-                                                  + lastLocation.char.xAdvance;
-                
+                var right:Number = lastLocation.x 
+                                                  + lastLocation.char.xAdvance + 8.7;
+												  
                 if (hAlign == HAlign.RIGHT)       xOffset =  containerWidth - right;
                 else if (hAlign == HAlign.CENTER) xOffset = (containerWidth - right) / 2;
                 

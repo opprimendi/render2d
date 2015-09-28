@@ -50,10 +50,7 @@ package render2d.core.shading
 								+	"mov	op,			vt0						  ";//copy meshVertexData to output
 								
 			fragmentData = 			//anisotropic2x												 		//pixel(Vec2 position, TextureFillModel fillMode, TextureSampler sampler, MipMapSampler mipSampler, Number bias)
-										"tex ft0, v0, fs0 <ignoresampler>\n"//<2d,repeat,anisotropic4x,miplinear> \n" //Pixel pixel = texture.getPixelAt(fs0, TextureFillModel.WRAP, TextureSampler.LINEAR, MipMapSampler.LINEAR, -0.5
-									//+	"add ft0, v0, ft0 \n"
-									//+	"div ft0, v0, ft0 \n"
-									
+										"tex ft0 v0 fs0 <ignoresampler> \n"
 									
 									+	"sub ft0.xyz ft0.xyz fc0.www \n"
 									+	"add ft0.xyz ft0.xyz fc0.xyz \n"

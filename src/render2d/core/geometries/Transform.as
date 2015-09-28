@@ -11,9 +11,9 @@ package render2d.core.geometries
 		public var scaleX:Number = 1;
 		public var scaleY:Number = 1;
 		
-		private var _rotationX:Number = 0;
-		private var _rotationY:Number = 0;
-		private var _rotationZ:Number = 0;
+		protected var _rotationX:Number = 0;
+		protected var _rotationY:Number = 0;
+		protected var _rotationZ:Number = 0;
 		
 		public function Transform() 
 		{

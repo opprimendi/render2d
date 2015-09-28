@@ -55,20 +55,35 @@ package render2d.core.text
 			{
 				geometry = new BaseGeometry();
 				
+				var indicesStep:int = 0;
+				
 				for (var i:int = 0; i < patternLength; i++)
 				{
 					var char:String = textPattern.charAt(i);
+					
+					var charData:BitmapChar = textFormat.font.getChar(char.charCodeAt(0));
+						
+					var u1:Number = charData.x / textFormat.font.textureWidth;
+					var u2:Number = (charData.x + charData.width) / textFormat.font.textureWidth;
+					var v1:Number = charData.y / textFormat.font.textureHeight;
+					var v2:Number = (charData.y + charData.height) / textFormat.font.textureHeight;
 						
 					charIndexMap[char] = i;
 					usedChars[char] = 0;
-					
-					//textFormat.fontSize = 1;
 						
 					for (var j:int = 0; j < maxLength; j++)
 					{				
 						var delta:int = geometry.vertices.length / 4;
 						
-						textFormat.font.fillBatched(geometry.vertices, geometry.indecis, textWidth, textHeight, char, textFormat.fontSize, textFormat.hAlign, textFormat.vAlign);
+						geometry.addVertexAndUV(0, 0, u1, v1);
+						geometry.addVertexAndUV(charData.width, 0, u2, v1);
+						geometry.addVertexAndUV(charData.width, charData.height, u2, v2);
+						geometry.addVertexAndUV(0, charData.height, u1, v2);
+						
+						geometry.mapTriangle(indicesStep * 4, indicesStep * 4 + 1, indicesStep * 4 + 2);
+						geometry.mapTriangle(indicesStep * 4, indicesStep * 4 + 2, indicesStep * 4 + 3);
+						
+						indicesStep++;
 						
 						var orderValue:int = 4 + delta / 4;
 						
@@ -189,12 +204,12 @@ package render2d.core.text
 				//geometry.vertices[charIndex + 12] = x + charWidth;
 				//geometry.vertices[charIndex + 12 + 1] = y;
 				
-				x += charWidth + 2;
+				x += charWidth;
 				
 				usedChars[char]++;
 			}
 			
-			this.width = x - 2;
+			this.width = x;
 			
 			for (i = 0; i < len; i++)
 			{

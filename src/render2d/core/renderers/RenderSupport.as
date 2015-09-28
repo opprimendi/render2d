@@ -1,5 +1,6 @@
 package render2d.core.renderers 
 {
+	import flash.display.BitmapData;
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DMipFilter;
 	import flash.display3D.Context3DProfile;
@@ -337,6 +338,11 @@ package render2d.core.renderers
 		{
 			vertexBuffer.dispose();
 			rendererDebugData.vertexBuffersCreated--;
+		}
+		
+		public function drawToBitmap(bitmapData:BitmapData):void 
+		{
+			context3D.drawToBitmapData(bitmapData);
 		}
 		
 	}

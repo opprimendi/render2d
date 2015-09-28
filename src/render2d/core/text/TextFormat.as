@@ -19,6 +19,7 @@ package render2d.core.text
 		
 		public function TextFormat(font:BitmapFont, fontSize:Number = 12) 
 		{
+			this.fontSize = fontSize;
 			this.font = font;
 		}
 		

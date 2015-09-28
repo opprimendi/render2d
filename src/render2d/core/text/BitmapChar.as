@@ -39,6 +39,13 @@ package render2d.core.text
 
 		/** The height of the character in points. */
 		public var height:Number;
+		
+		public function toString():String 
+		{
+			return "[BitmapChar charID=" + charID + " xOffset=" + xOffset + " yOffset=" + yOffset + " xAdvance=" + xAdvance + 
+						" kernings=" + kernings + " x=" + x + " y=" + y + " width=" + width + " height=" + height + 
+						"]";
+		}
 
         /** Creates a char with a texture and its properties. */
         public function BitmapChar(id:int, x:Number, y:Number, width:Number, height:Number,
