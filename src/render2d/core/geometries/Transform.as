@@ -92,8 +92,8 @@ package render2d.core.geometries
 			//_transformData[2] = scaleX;
 			//_transformData[3] = -scaleY;
 			
-			_transformData[4] = 0;
-			_transformData[5] = 0;
+			_transformData[4] = Math.cos(FastMath.convertToRadian(_rotationX));
+			_transformData[5] = Math.sin(FastMath.convertToRadian(_rotationX));
 			_transformData[6] = 0;
 			
 			_transformData[7] = 0;

@@ -11,7 +11,7 @@ package render2d.core.display
 	{
 		public var debugMaterial:BaseMaterial;
 		
-		private var renderablesList:Vector.<Renderable> = new Vector.<Renderable>;
+		private var renderablesList:Vector.<Renderable>;
 		
 		private var orderBuffer:VertexBuffer3D;
 		private var orderBufferData:Vector.<Number> = new Vector.<Number>;
@@ -25,10 +25,13 @@ package render2d.core.display
 		private var constantsVector:Vector.<Number>
 		private var identityVector:Vector.<Number>
 		
+		private var renderablesCount:int = 0;
+		
 		public function BatchedLayer(primitive:BaseGeometry) 
 		{
 			constantsVector = new Vector.<Number>(maxUsedRegisters, true);
 			identityVector = new Vector.<Number>(maxUsedRegisters, true);
+			renderablesList = new Vector.<Renderable>(10000, true);
 			
 			this.primitive = primitive;
 			geometry = new BaseGeometry();
@@ -56,18 +59,19 @@ package render2d.core.display
 				
 		public function clean():void 
 		{
-			renderablesList = new Vector.<Renderable>;
+			renderablesCount = 0;
 		}
 		
 		public function addRenderable(renderable:Renderable):void
 		{
-			renderablesList.push(renderable);
+			renderablesList[renderablesCount] = renderable;
+			renderablesCount++;
 		}
 		
 		private var zzz:Number = 0;
 		override public function render(renderSupport:RenderSupport):void 
 		{
-			var numRenderables:int = renderablesList.length;
+			var numRenderables:int = renderablesCount;
 			geometry.verticesCount = 0;
 			geometry.trianglesCount = 0;
 			
