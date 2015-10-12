@@ -13,6 +13,7 @@ package render2d.core.renderers
 	import flash.display3D.VertexBuffer3D;
 	import flash.utils.ByteArray;
 	import render2d.core.cameras.Camera;
+	import render2d.core.display.BlendMode;
 	import render2d.core.display.Renderable;
 	import render2d.core.geometries.BaseGeometry;
 	import render2d.core.materials.BaseMaterial;
@@ -25,7 +26,7 @@ package render2d.core.renderers
 		private var fragmentColorBuffer:Vector.<Number> = new Vector.<Number>(4, true);
 		public var currentFragmentColorBuffer:Vector.<Number> = new Vector.<Number>(4, true);
 		
-		
+		private var _blendMode:BlendMode = BlendMode.NORMAL;
 		
 		public var rendererDebugData:RendererDebugData = new RendererDebugData();
 		
@@ -107,6 +108,7 @@ package render2d.core.renderers
 			setSamplerStateAt(0, renderable.samplerData);
 			
 			setShader(renderable.shader);
+			setBlendMode(renderable.blendMode);
 			
 			//rendererDebugData.materialsUsed = 1;
 			//rendererDebugData.geometriesCount = 1;
@@ -151,6 +153,16 @@ package render2d.core.renderers
 					}
 				
 			drawTriangles(geom.indexBuffer);
+		}
+		
+		public function setBlendMode(value:BlendMode):void
+		{
+			if (_blendMode == value)
+				return;
+				
+			rendererDebugData.stateChanges++;
+			_blendMode = value;
+			_blendMode.applyBlendMode(context3D);
 		}
 		
 		private function setSamplerStateAt(samplerIndex:int, newSamplerData:SamplerData):void 

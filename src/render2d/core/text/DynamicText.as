@@ -100,6 +100,7 @@ package render2d.core.text
 		public function clone():DynamicText
 		{
 			var cloned:DynamicText = new DynamicText(textFormat, textPattern, maxLength, textWidth, textHeight, geometry);
+			cloned.blendMode = blendMode;
 			cloned.charIndexMap = charIndexMap;
 			cloned.orderBufferData = orderBufferData;
 			cloned.charsWidth = charsWidth;

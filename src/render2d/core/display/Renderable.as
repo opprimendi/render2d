@@ -15,6 +15,7 @@ package render2d.core.display
 		public var samplerData:SamplerData;
 		
 		public var shader:AbstractShader;
+		public var blendMode:BlendMode = BlendMode.NORMAL;
 		
 		public var visible:Boolean = false;
 		

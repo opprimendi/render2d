@@ -1,5 +1,6 @@
 package render2d.core.display 
 {
+	import cells.FoodView;
 	import flash.display3D.Context3DProgramType;
 	import flash.display3D.Context3DVertexBufferFormat;
 	import flash.display3D.VertexBuffer3D;
@@ -30,8 +31,23 @@ package render2d.core.display
 		public function BatchedLayer(primitive:BaseGeometry) 
 		{
 			constantsVector = new Vector.<Number>(maxUsedRegisters, true);
+			
+			var k:int = 0;
+			for (var i:int = 0; i < maxRenderables; i++)
+			{
+				constantsVector[k] =     0;
+				constantsVector[k + 1] = 0;
+				
+				constantsVector[k + 2] = 0;
+				constantsVector[k + 3] = 0;
+				
+				constantsVector[k + 4] = 1;
+				constantsVector[k + 5] = 1;
+				k += 8;
+			}
+			
 			identityVector = new Vector.<Number>(maxUsedRegisters, true);
-			renderablesList = new Vector.<Renderable>(10000, true);
+			renderablesList = new Vector.<Renderable>(15000, true);
 			
 			this.primitive = primitive;
 			geometry = new BaseGeometry();
@@ -60,6 +76,12 @@ package render2d.core.display
 		public function clean():void 
 		{
 			renderablesCount = 0;
+		}
+		
+		public function setRenderList(foodBufferList:Vector.<Renderable>, foodsCount:int):void 
+		{
+			renderablesCount = foodsCount;
+			renderablesList = foodBufferList;
 		}
 		
 		public function addRenderable(renderable:Renderable):void
@@ -252,5 +274,4 @@ package render2d.core.display
 			return "[BatchedLayer]";
 		}
 	}
-
 }

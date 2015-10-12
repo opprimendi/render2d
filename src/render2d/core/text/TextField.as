@@ -74,6 +74,7 @@ package render2d.core.text
 		public function clone():TextField
 		{
 			var textField:TextField = new TextField(text, textWidth, textHeight, textFormat, false);
+			textField.blendMode = blendMode;
 			textField.geometry = this.geometry;
 			textField.shader = shader;
 			textField.minX = minX;
