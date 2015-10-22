@@ -14,13 +14,13 @@ package render2d.core.primitives
 		
 		private function construct():void 
 		{
-			setVertexAndUv(0, -0.5,  -0.5, 0, 0);
-			setVertexAndUv(1,  0.5,  -0.5, 1, 0);
-			setVertexAndUv(2,  0.5,   0.5, 1, 1);
-			setVertexAndUv(3, -0.5,   0.5, 0, 1);
+			setVertexAndUV(0, -0.5,  -0.5, 0, 0);
+			setVertexAndUV(1,  0.5,  -0.5, 1, 0);
+			setVertexAndUV(2,  0.5,   0.5, 1, 1);
+			setVertexAndUV(3, -0.5,   0.5, 0, 1);
 		
-			setTriangle(0, 0, 1, 2);
-			setTriangle(1, 0, 2, 3);
+			updateTriangleMap(0, 0, 1, 2);
+			updateTriangleMap(1, 0, 2, 3);
 		}
 	}
 }

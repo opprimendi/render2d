@@ -41,13 +41,26 @@ package render2d.core.geometries
 			indecis = new Vector.<uint>(trianglesCount * 3, isStatic);
 		}
 		
+		/**
+		 * Map vertices indices to triangle
+		 * @param	v1 - vertex index #1
+		 * @param	v2 - vertex index #2
+		 * @param	v3 - vertex index #3
+		 */
 		public function mapTriangle(v1:int, v2:int, v3:int):void
 		{
 			indecis.push(v1, v2, v3);
 			trianglesCount++;
 		}
 		
-		public function setTriangle(i:int, v1:int, v2:int, v3:int):void 
+		/**
+		 * Update specified triangle vertices indices
+		 * @param	i - index of triangle
+		 * @param	v1 - vertex index #1
+		 * @param	v2 - vertex index #2
+		 * @param	v3 - vertex index #3
+		 */
+		public function updateTriangleMap(i:int, v1:int, v2:int, v3:int):void 
 		{
 			i *= 3;
 			indecis[i] = v1;
@@ -56,6 +69,13 @@ package render2d.core.geometries
 			trianglesCount++;
 		}
 		
+		/**
+		 * Push new vertex and uv to buffers, uses only with non static geometry
+		 * @param	x - vertex X value
+		 * @param	y - vertex Y value
+		 * @param	u - vertex U value
+		 * @param	v - vertex V value
+		 */
 		public function addVertexAndUV(x:Number, y:Number, u:Number, v:Number):void
 		{
 			minX = Math.min(x, minX);
@@ -72,7 +92,15 @@ package render2d.core.geometries
 			vertices.push(x, y, u, v);
 		}
 		
-		public function setVertexAndUv(i:int, x:Number, y:Number, u:Number, v:Number):void
+		/**
+		 * Update specified vertex x,y and u,v values, uses to fill up geometry in static mode or update vertices values
+		 * @param	i - vertex index
+		 * @param	x - vertex X value
+		 * @param	y - vertex Y value
+		 * @param	u - vertex U value
+		 * @param	v - vertex V value
+		 */
+		public function setVertexAndUV(i:int, x:Number, y:Number, u:Number, v:Number):void
 		{
 			minX = Math.min(x, minX);
 			maxX = Math.max(x, maxX);
@@ -90,6 +118,12 @@ package render2d.core.geometries
 			vertices[i + 3] = v;
 		}
 		
+		/**
+		 * Set specified vertex x, y values
+		 * @param	i - vertex index
+		 * @param	x - vertex X value
+		 * @param	y - vertex Y value
+		 */
 		public function setVertex(i:int, x:Number, y:Number):void
 		{
 			minX = Math.min(x, minX);
@@ -104,25 +138,40 @@ package render2d.core.geometries
 			vertices[i + 1] = y;
 		}
 		
-		public function addUVStride(x:Number, y:Number):void
+		/**
+		 * Add offset to all u,v valuse in geometry and update buffer if neccessary
+		 * @param	u - u value offset
+		 * @param	v - v value offset
+		 * @param	updateBuffer - if set to true then UV buffer will be reupload
+		 */
+		public function addUVStride(u:Number, v:Number, updateBuffer:Boolean = true):void
 		{
-			var len:int = vertices.length;
-			
 			for (var i:int = 0; i < verticesCount; i+=4)
 			{
-				vertices[i + 2] += y;
-				vertices[i + 3] += y;
+				vertices[i + 2] += u;
+				vertices[i + 3] += v;
 			}
 			
-			updateUV();
+			if(updateBuffer)
+				updateUV();
 		}
 		
+		/**
+		 * Set or update specified vertex UV values
+		 * @param	i - vertex index
+		 * @param	u - vertex U value
+		 * @param	v - vertex V value
+		 */
 		public function setUV(i:int, u:Number, v:Number):void
 		{
 			vertices[i + 2] = u;
 			vertices[i + 3] = v;
 		}
 		
+		/**
+		 * Call on render phase it need to set render support and update buffers if it neccessarry also set buffers to context
+		 * @param	renderSupport
+		 */
 		public function render(renderSupport:RenderSupport):void
 		{
 			if (!_init)
@@ -131,17 +180,29 @@ package render2d.core.geometries
 			setBuffers(renderSupport);
 		}
 		
+		/**
+		 * Set buffers to context at 0(x, y values), 1(u, v values)
+		 * @param	renderSupport
+		 */
 		private function setBuffers(renderSupport:RenderSupport):void 
 		{
 			renderSupport.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
 			renderSupport.setVertexBufferAt(1, vertexBuffer, 2, Context3DVertexBufferFormat.FLOAT_2);
 		}
 		
+		/**
+		 * fully reupload UV buffer
+		 */
 		public function updateUV():void
 		{
 			uploadVertexBuffer(verticesCount / 2);
 		}
 		
+		/**
+		 * Upload/reupload vertex buffer or just part of buffer
+		 * @param	offset - start vertex index
+		 * @param	length - number of vertices to upload
+		 */
 		public function uploadVertexBuffer(offset:int = 0, length:int = 0):void
 		{
 			if (!vertexBuffer)
@@ -153,6 +214,11 @@ package render2d.core.geometries
 			renderSupport.uploadVertexBuffer(vertexBuffer, vertices, offset, length);
 		}
 		
+		/**
+		 * Upload/reupload index buffer or just set part of buffer
+		 * @param	offset - start index of indices
+		 * @param	length - number of indices to upload
+		 */
 		public function uploadIndexBuffer(offset:int = 0, length:int = 0):void
 		{
 			if (!indexBuffer)
@@ -164,6 +230,10 @@ package render2d.core.geometries
 			renderSupport.uploadIndexBuffer(indexBuffer, indecis, offset, length);
 		}
 		
+		/**
+		 * Init operation. Create buffers and upload them first time
+		 * @param	renderSupport
+		 */
 		private function init(renderSupport:RenderSupport):void 
 		{
 			_init = true;
@@ -179,6 +249,9 @@ package render2d.core.geometries
 			uploadIndexBuffer(0, indecis.length);
 		}
 		
+		/**
+		 * Fully dispose geometry, release GPU memory and destroy buffers
+		 */
 		public function dispose():void 
 		{
 			if (renderSupport)

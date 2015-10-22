@@ -9,7 +9,7 @@ package render2d.core.geometries
 		
 		function addVertexAndUV(x:Number, y:Number, u:Number, v:Number):void;
 		
-		function setVertexAndUv(i:int, x:Number, y:Number, u:Number, v:Number):void;
+		function setVertexAndUV(i:int, x:Number, y:Number, u:Number, v:Number):void;
 		
 		function setVertex(i:int, x:Number, y:Number):void;
 		

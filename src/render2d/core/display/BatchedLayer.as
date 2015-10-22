@@ -1,6 +1,5 @@
 package render2d.core.display 
 {
-	import cells.FoodView;
 	import flash.display3D.Context3DProgramType;
 	import flash.display3D.Context3DVertexBufferFormat;
 	import flash.display3D.VertexBuffer3D;
@@ -181,7 +180,7 @@ package render2d.core.display
 			
 			if (isNeedFinalRender)
 			{
-				
+				//TODO: можно забивать в констанс вектор пустые значения после актуальных для того чтобы сделать на 1 вызов меньше сет константс. А вообще клин тут не нужен т.к нужно вызвать drawTriangles с правильным количеством триугольников
 				renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4 + k * 2, identityVector, (maxRenderables - k) * 2); //clean unused registers
 				renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, constantsVector, k * 2); //fill registers to use
 				geometry.verticesCount = k * 8;
