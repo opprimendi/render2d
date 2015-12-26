@@ -39,10 +39,10 @@ package render2d.core.display
 			}
 		}
 		
-		public function uploadTexture(textureSource:BitmapData):Texture 
+		public function uploadTexture(textureSource:BitmapData, isUseMipmaps:Boolean = true):Texture 
 		{
 			var mipLevel:int = FastMath.log(textureSource.width, 2);
-			var texture:Texture = context3D.createTexture(textureSource.width, textureSource.height, textureSource.transparent? Context3DTextureFormat.BGRA:Context3DTextureFormat.BGRA, false, mipLevel);
+			var texture:Texture = context3D.createTexture(textureSource.width, textureSource.height, textureSource.transparent? Context3DTextureFormat.BGRA:Context3DTextureFormat.BGRA, false, isUseMipmaps? mipLevel:0);
 			
 			var textureUploadData:TextureUploaderData = new TextureUploaderData();
 			textureUploadData.currentMipLevel = mipLevel;
@@ -53,6 +53,11 @@ package render2d.core.display
 			textureUploadData.textureSource = textureSource;
 			
 			texturesList.push(textureUploadData);
+			
+			if (isUseMipmaps)
+			{
+				textureUploadData.currentMipLevel = 0;
+			}
 			
 			return texture;
 		}

@@ -23,7 +23,7 @@ package render2d.core.renderers
 	
 	public class RenderSupport 
 	{
-		private var fragmentColorBuffer:Vector.<Number> = new Vector.<Number>(4, true);
+		public var fragmentColorBuffer:Vector.<Number> = new Vector.<Number>(4, true);
 		public var currentFragmentColorBuffer:Vector.<Number> = new Vector.<Number>(4, true);
 		
 		private var _blendMode:BlendMode = BlendMode.NORMAL;
