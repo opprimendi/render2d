@@ -7,8 +7,8 @@ package render2d.core.renderers
 	import render2d.core.cameras.Camera;
 	import render2d.core.display.BatchedLayer;
 	import render2d.core.display.Renderable;
-	import render2d.core.shading.BasicShader;
-	import render2d.core.shading.BatchShader;
+	import render2d.core.gl.shading.BasicShader;
+	import render2d.core.gl.shading.BatchShader;
 
 	public class BasicRenderer implements IRenderer
 	{

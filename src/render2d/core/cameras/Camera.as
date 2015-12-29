@@ -27,6 +27,21 @@ package render2d.core.cameras
 			wScreenSpaceRatio = 1 / width * 2;
 		}
 		
+		override public function copyTransformTo(constantsVector:Vector.<Number>, registerIndex:int):void 
+		{
+			constantsVector[registerIndex++] = x;
+			constantsVector[registerIndex++] = -y;
+			
+			constantsVector[registerIndex++] = scaleX;
+			constantsVector[registerIndex++] = -scaleY;
+			
+			constantsVector[registerIndex++] = 0;
+			constantsVector[registerIndex++] = 0;
+			
+			constantsVector[registerIndex++] = transformData[6];
+			constantsVector[registerIndex++] = transformData[7];
+		}
+		
 		public function get minX():Number
 		{
 			return x - halfWidth / scaleX;

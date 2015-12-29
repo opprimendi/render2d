@@ -10,7 +10,7 @@ package render2d.core.renderers
 		public var filter:String;
 		public var mipFilter:String;
 		
-		public function SamplerData(wrapMode:String = Context3DWrapMode.CLAMP, filter:String = Context3DTextureFilter.LINEAR, mipFilter:String = Context3DMipFilter.MIPLINEAR) 
+		public function SamplerData(wrapMode:String = Context3DWrapMode.CLAMP, filter:String = Context3DTextureFilter.LINEAR, mipFilter:String = Context3DMipFilter.MIPNONE) 
 		{
 			this.mipFilter = mipFilter;
 			this.filter = filter;

@@ -4,6 +4,8 @@ package render2d.core.gl
 	
 	public class Profile 
 	{
+		public var type:String;
+		
 		public var maxVertexBuffers:int;
 		public var maxIndexBuffers:int;
 		public var maxProgram:int;
@@ -34,6 +36,8 @@ package render2d.core.gl
 				return getStandartConstrainedProfile();
 			else if (profile == Context3DProfile.STANDARD_EXTENDED)
 				return getStandardExtendedProfile();
+			else
+				return null;
 		}
 		
 		static private function getStandardExtendedProfile():Profile 
@@ -50,7 +54,7 @@ package render2d.core.gl
 			profile.maxFragmentConstants = 64;
 			profile.maxAgalVersion = 3;
 			
-			profile.maxRectangleTextureSize = 4096;
+			profile.maxTextureSize = 4096;
 			profile.isUseRectangleTexture = true;
 			profile.isUseFloatTextures = true;
 			profile.isUseMRT = true;
@@ -73,7 +77,7 @@ package render2d.core.gl
 			profile.maxFragmentConstants = 64;
 			profile.maxAgalVersion = 2;
 			
-			profile.maxRectangleTextureSize = 4096;
+			profile.maxTextureSize = 4096;
 			profile.isUseRectangleTexture = true;
 			profile.isUseFloatTextures = true;
 			profile.isUseMRT = false;
@@ -96,7 +100,7 @@ package render2d.core.gl
 			profile.maxFragmentConstants = 64;
 			profile.maxAgalVersion = 2;
 			
-			profile.maxRectangleTextureSize = 4096;
+			profile.maxTextureSize = 4096;
 			profile.isUseRectangleTexture = true;
 			profile.isUseFloatTextures = true;
 			profile.isUseMRT = true;
@@ -119,7 +123,7 @@ package render2d.core.gl
 			profile.maxFragmentConstants = 28;
 			profile.maxAgalVersion = 1;
 			
-			profile.maxRectangleTextureSize = 2048;
+			profile.maxTextureSize = 2048;
 			profile.isUseRectangleTexture = false;
 			profile.isUseFloatTextures = false;
 			profile.isUseMRT = false;

@@ -12,8 +12,8 @@ package render2d.core.renderers
 	import render2d.core.geometries.BaseGeometry;
 	import render2d.core.materials.BaseMaterial;
 	import render2d.core.primitives.ScreenPrimitive;
-	import render2d.core.shading.BasicShader;
-	import render2d.core.shading.ScreenShader;
+	import render2d.core.gl.shading.BasicShader;
+	import render2d.core.gl.shading.ScreenShader;
 
 	public class MultyRenderRenderer 
 	{

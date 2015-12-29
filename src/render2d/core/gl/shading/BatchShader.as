@@ -1,12 +1,12 @@
-package render2d.core.shading 
+package render2d.core.gl.shading 
 {
 	public class BatchShader extends AssemblerShader
 	{
 		public function BatchShader() 
 		{
+			super(StandarShders.BATCH_SHADER, ShaderVersion.V1);
+			
 			vertexData = 															
-																					
-							
 																					//Transform representation
 																					//Transform{position(x, y), scale(x, y)} 1 register(xyzw)
 																					//Rotation{rotatioX(cosX, sinX), notUsed, notUsed) 1 register (xyzw)

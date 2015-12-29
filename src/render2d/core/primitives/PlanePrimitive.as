@@ -4,7 +4,6 @@ package render2d.core.primitives
 	
 	public class PlanePrimitive extends BaseGeometry 
 	{
-		
 		public function PlanePrimitive() 
 		{
 			super(2, 4, true);

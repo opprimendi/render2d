@@ -1,9 +1,11 @@
-package render2d.core.shading 
+package render2d.core.gl.shading 
 {
 	public class BasicShader extends AssemblerShader
 	{
 		public function BasicShader() 
 		{
+			super(StandarShders.BASIC_SHADER, ShaderVersion.V1);
+			
 			vertexData = 
 																					//Matrix3D cameraTransform = vc0;
 																					//Matrix3D meshTransform = vc2;
@@ -18,7 +20,7 @@ package render2d.core.shading
 								+	"sub	vt0.x		vt2.x		vt2.y		\n" //meshVertexData.multipy(meshTransform.scale);
 								
 								
-								+	"mov	vt2 		va0					\n" //Vec2[] meshVertexData = mesh.vertexData;
+								+	"mov	vt2 		va0						\n" //Vec2[] meshVertexData = mesh.vertexData;
 								+	"mul	vt2.x		vt2.x		vc3.y		\n" //meshVertexData.multipy(meshTransform.scale);
 								+	"mul	vt2.y		vt2.y		vc3.x		\n" //meshVertexData.multipy(meshTransform.scale);
 								+	"add	vt0.y		vt2.x		vt2.y		\n" //meshVertexData.multipy(meshTransform.scale);

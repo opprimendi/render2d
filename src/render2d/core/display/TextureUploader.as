@@ -33,7 +33,10 @@ package render2d.core.display
 					continue;
 				}
 				else
+				{
+					trace("upload mip", currentTexture.currentMipLevel);
 					MipmapGenerator.generateMipMaps(currentTexture.textureSource, currentTexture.texture, currentTexture.isUseAlpha, -1, currentTexture.currentMipLevel, 1);
+				}
 					
 				currentTexture.currentMipLevel--;
 			}
@@ -54,9 +57,10 @@ package render2d.core.display
 			
 			texturesList.push(textureUploadData);
 			
-			if (isUseMipmaps)
+			if (!isUseMipmaps)
 			{
 				textureUploadData.currentMipLevel = 0;
+				textureUploadData.maxMipLevel = 0;
 			}
 			
 			return texture;

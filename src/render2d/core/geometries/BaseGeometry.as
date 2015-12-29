@@ -3,15 +3,14 @@ package render2d.core.geometries
 	import flash.display3D.Context3DVertexBufferFormat;
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
-	import render2d.core.renderers.RenderSupport;
+	import render2d.core.gl.GeometryContext;
 	
 	public class BaseGeometry implements IGeometry
 	{
-		private var renderSupport:RenderSupport;
+		private var geometryContext:GeometryContext;
+		
 		public var vertexBuffer:VertexBuffer3D;
 		public var indexBuffer:IndexBuffer3D;
-		
-		//public var id:int = Ident.next();
 		
 		public var numVertices:int;
 		public var uvsCount:int;
@@ -66,7 +65,6 @@ package render2d.core.geometries
 			indecis[i] = v1;
 			indecis[i + 1] = v2;
 			indecis[i + 2] = v3;
-			trianglesCount++;
 		}
 		
 		/**
@@ -170,24 +168,24 @@ package render2d.core.geometries
 		
 		/**
 		 * Call on render phase it need to set render support and update buffers if it neccessarry also set buffers to context
-		 * @param	renderSupport
+		 * @param	geometryContext
 		 */
-		public function render(renderSupport:RenderSupport):void
+		public function setToContext(geometryContext:GeometryContext):void
 		{
 			if (!_init)
-				init(renderSupport);
+				init(geometryContext);
 				
-			setBuffers(renderSupport);
+			setBuffers(geometryContext);
 		}
 		
 		/**
 		 * Set buffers to context at 0(x, y values), 1(u, v values)
-		 * @param	renderSupport
+		 * @param	geometryContext
 		 */
-		private function setBuffers(renderSupport:RenderSupport):void 
+		private function setBuffers(geometryContext:GeometryContext):void 
 		{
-			renderSupport.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
-			renderSupport.setVertexBufferAt(1, vertexBuffer, 2, Context3DVertexBufferFormat.FLOAT_2);
+			geometryContext.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
+			geometryContext.setVertexBufferAt(1, vertexBuffer, 2, Context3DVertexBufferFormat.FLOAT_2);
 		}
 		
 		/**
@@ -211,7 +209,7 @@ package render2d.core.geometries
 			if (length == 0)
 				length = numVertices;
 			
-			renderSupport.uploadVertexBuffer(vertexBuffer, vertices, offset, length);
+			geometryContext.uploadVertexBuffer(vertexBuffer, vertices, offset, length);
 		}
 		
 		/**
@@ -227,23 +225,23 @@ package render2d.core.geometries
 			if (length == 0)
 				length = numVertices;
 			
-			renderSupport.uploadIndexBuffer(indexBuffer, indecis, offset, length);
+			geometryContext.uploadIndexBuffer(indexBuffer, indecis, offset, length);
 		}
 		
 		/**
 		 * Init operation. Create buffers and upload them first time
-		 * @param	renderSupport
+		 * @param	geometryContext
 		 */
-		private function init(renderSupport:RenderSupport):void 
+		private function init(geometryContext:GeometryContext):void 
 		{
 			_init = true;
 			
-			this.renderSupport = renderSupport;
+			this.geometryContext = geometryContext;
 			
 			numVertices = vertices.length / 4;
 			
-			vertexBuffer = renderSupport.createVertexBuffer(numVertices, 4);
-			indexBuffer = renderSupport.createIndexBuffer(indecis.length);
+			vertexBuffer = geometryContext.createVertexBuffer(numVertices, 4);
+			indexBuffer = geometryContext.createIndexBuffer(indecis.length);
 			
 			uploadVertexBuffer(0, numVertices);
 			uploadIndexBuffer(0, indecis.length);
@@ -254,10 +252,10 @@ package render2d.core.geometries
 		 */
 		public function dispose():void 
 		{
-			if (renderSupport)
+			if (geometryContext)
 			{
-				renderSupport.disposeIndexBuffer(indexBuffer)
-				renderSupport.disposeVertexBuffer(vertexBuffer)
+				geometryContext.disposeIndexBuffer(indexBuffer)
+				geometryContext.disposeVertexBuffer(vertexBuffer)
 			}
 		}
 	}

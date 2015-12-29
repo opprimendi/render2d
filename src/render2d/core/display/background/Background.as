@@ -6,7 +6,7 @@ package render2d.core.display.background
 	import render2d.core.materials.BaseMaterial;
 	import render2d.core.renderers.RenderSupport;
 	import render2d.core.renderers.SamplerData;
-	import render2d.core.shading.BackgroundShader;
+	import render2d.core.gl.shading.BackgroundShader;
 
 	
 	public class Background extends Renderable 

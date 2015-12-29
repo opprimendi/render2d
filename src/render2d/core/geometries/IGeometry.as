@@ -1,7 +1,5 @@
 package render2d.core.geometries 
 {
-	import render2d.core.renderers.RenderSupport;
-	
 	public interface IGeometry 
 	{
 		

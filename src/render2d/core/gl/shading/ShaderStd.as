@@ -1,9 +1,5 @@
-package render2d.core.shading 
+package render2d.core.gl.shading 
 {
-	/**
-	 * ...
-	 * @author Asfel
-	 */
 	public class ShaderStd 
 	{
 		

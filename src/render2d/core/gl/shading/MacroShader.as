@@ -1,4 +1,4 @@
-package render2d.core.shading 
+package render2d.core.gl.shading 
 {
 	import com.adobe.utils.AGALMacroAssembler;
 	import flash.display3D.Context3DProgramType;

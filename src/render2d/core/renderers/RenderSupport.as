@@ -19,7 +19,7 @@ package render2d.core.renderers
 	import render2d.core.materials.BaseMaterial;
 	import render2d.core.renderers.debug.RendererDebugData;
 	import avm2.intrinsics.memory.li32;
-	import render2d.core.shading.AbstractShader;
+	import render2d.core.gl.shading.AbstractShader;
 	
 	public class RenderSupport 
 	{

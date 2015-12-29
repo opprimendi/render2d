@@ -10,7 +10,7 @@ package render2d.core.display
 		private var identityVector:Vector.<Number>;
 		public var constantsValue:Vector.<Number>;
 		
-		public var currentRegisterIndex:int = 0;
+		public var size:int = 0;
 		
 		public var type:String;
 		
@@ -21,17 +21,20 @@ package render2d.core.display
 			identityVector = new Vector.<Number>(size, true);
 		}
 		
-		public function addValue(value:Number):void
+		[Inline]
+		public final function addValue(value:Number):void
 		{
-			setValue(currentRegisterIndex++, value);
+			setValue(size++, value);
 		}
 		
-		public function setValue(registerIndex:int, value:Number):void
+		[Inline]
+		public final function setValue(registerIndex:int, value:Number):void
 		{
 			constantsValue[registerIndex] = value
 		}
 		
-		public function addFromVector(vector:Vector.<Number>, startFrom:int, length:int):void
+		[Inline]
+		public final function addFromVector(vector:Vector.<Number>, startFrom:int, length:int):void
 		{
 			length += startFrom;
 			for (var i:int = startFrom; i < length; i++)
@@ -40,7 +43,8 @@ package render2d.core.display
 			}
 		}
 		
-		public function setVector(vector:Vector.<Number>, startRegisterIndex:int, startFrom:int, length:int):void
+		[Inline]
+		public final function setVector(vector:Vector.<Number>, startRegisterIndex:int, startFrom:int, length:int):void
 		{
 			length += startFrom;
 			for (var i:int = startFrom; i < length; i++)
@@ -49,20 +53,30 @@ package render2d.core.display
 			}
 		}
 		
-		public function upload(context3D:Context3D, registerOffset:int):void
+		[Inline]
+		public final function upload(context3D:Context3D, registerOffset:int):void
 		{
+			if (size == 0)
+				return;
+				
 			this.registerOffset = registerOffset;
-			context3D.setProgramConstantsFromVector(type, registerOffset, constantsValue, currentRegisterIndex);
+			context3D.setProgramConstantsFromVector(type, registerOffset, constantsValue, size / 4);
 		}
 		
-		public function clear(context3D:Context3D):void
+		[Inline]
+		public final function clear(context3D:Context3D):void
 		{
-			context3D.setProgramConstantsFromVector(type, registerOffset, identityVector, currentRegisterIndex);
+			if (size == 0)
+				return;
+				
+			registerOffset = 0;
+			context3D.setProgramConstantsFromVector(type, registerOffset, identityVector, size / 4);
 		}
 		
-		public function clearConstants():void
+		[Inline]
+		public final function clearConstants():void
 		{
-			currentRegisterIndex = 0;
+			size = 0;
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package render2d.core.shading 
+package render2d.core.gl.shading 
 {
 	public class EdgeOutlineShader extends AssemblerShader
 	{

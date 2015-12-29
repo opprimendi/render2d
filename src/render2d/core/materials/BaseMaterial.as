@@ -2,33 +2,30 @@ package render2d.core.materials
 {
 	import flash.display3D.Context3D;
 	import flash.display3D.textures.TextureBase;
+	import render2d.core.display.BlendMode;
+	import render2d.core.gl.shading.StandarShders;
+	import render2d.core.renderers.SamplerData;
 
 	public class BaseMaterial 
 	{
-		//public var id:int = Ident.next();
-		
 		public var texture:TextureBase;
-		public var useColor:Boolean = false;
-		public var r:Number;
-		public var g:Number;
-		public var b:Number;
-		public var a:Number;
 		
-		//private var _init:Boolean;
+		public var useColor:Boolean = false;
+		public var colorBuffer:ColorBuffer = new ColorBuffer();
+		
+		public var samplerData:SamplerData;
+		
+		public var shader:int = StandarShders.BASIC_SHADER
+		public var blendMode:BlendMode = BlendMode.NORMAL;
 		
 		public function BaseMaterial(texture:TextureBase) 
 		{
 			this.texture = texture;
 		}
 		
-		public function render(context3D:Context3D):void 
+		public function setToContext(context3D:Context3D):void 
 		{
-			//if (!_init)
-			//{
-			//	_init = true;
-			
-				context3D.setTextureAt(0, texture);
-			//}
+			context3D.setTextureAt(0, texture);
 		}
 		
 		public function clone():BaseMaterial
@@ -36,5 +33,4 @@ package render2d.core.materials
 			return new BaseMaterial(texture);
 		}
 	}
-
 }

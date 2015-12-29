@@ -1,9 +1,11 @@
-package render2d.core.shading 
+package render2d.core.gl.shading 
 {
 	public class BackgroundShader extends AssemblerShader
 	{
 		public function BackgroundShader() 
 		{
+			super(StandarShders.BACKGROUND_SHADER, ShaderVersion.V1);
+			
 			vertexData = 
 																					//Matrix3D cameraTransform = vc0;
 																					//Matrix3D meshTransform = vc2;
