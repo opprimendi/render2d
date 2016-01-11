@@ -19,8 +19,6 @@ package render2d.core.gl
 		
 		private var fragmentBuffer:ConstantBuffer;
 		
-		
-		
 		public function MaterialContext(profile:Profile, context3D:Context3D) 
 		{
 			this.profile = profile;
@@ -54,7 +52,7 @@ package render2d.core.gl
 		[Inline]
 		public final function setMaterial(material:BaseMaterial):void
 		{
-			var texture:TextureBase = material.texture;
+			var texture:TextureBase = material.texture.nativeTexture;
 			
 			if (currentTexture != texture)
 				setTexture(material);
@@ -67,6 +65,7 @@ package render2d.core.gl
 					setColor(color);
 			}
 			
+			samplerData = currentMaterial.samplerData;
 			context3D.setSamplerStateAt(0, samplerData.wrapMode, samplerData.filter, samplerData.mipFilter);
 		}
 		
@@ -81,7 +80,7 @@ package render2d.core.gl
 		private function setTexture(material:BaseMaterial):void 
 		{
 			this.currentMaterial = material;
-			this.currentTexture = material.texture;
+			this.currentTexture = material.texture.nativeTexture;
 			
 			material.setToContext(context3D);
 		}

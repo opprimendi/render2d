@@ -38,7 +38,7 @@ package render2d.core.gl.shading
 								+	"mul	vt0.xy		vt0.xy		vc2.zw		\n" //add container scale
 								+	"add	vt0.xy		vt0.xy		vc2.xy		\n" //add container position
 								
-								+	ShaderStd.CREEN_SPACE_RATIO 					//meshVertexData.multipy(cameraTransform.screenSpaceRatio);		//apply screen space ration to mesh vertices(1 pixel in backbufer is have different size bacause it based on backbufer w, h. In backbuffer coordinates is -1 - 1 not the w, h passed in configure back buffer
+								+	ShaderStd.SCREEN_SPACE_RATIO 					//meshVertexData.multipy(cameraTransform.screenSpaceRatio);		//apply screen space ration to mesh vertices(1 pixel in backbufer is have different size bacause it based on backbufer w, h. In backbuffer coordinates is -1 - 1 not the w, h passed in configure back buffer
 								+	"mov	v0, 		va1						\n" //copy uvData to v1
 								+	"mov	op,			vt0						  ";//copy meshVertexData to output
 								

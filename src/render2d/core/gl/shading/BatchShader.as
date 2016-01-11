@@ -53,7 +53,7 @@ package render2d.core.gl.shading
 								+	"mov	vt1.xy		vc0.zw					\n" //Scale cameraScale = cameraTransform.scale;
 								+	"abs	vt1.y		vt1.y					\n"	//cameraScale.y = Math.abs(cameraScale.y);						//because camera behing scene :E by default
 								+	"mul	vt0.xy		vt0.xy		vt1.xy		\n" //meshVertexData.multipy(cameraScale);							//apply camera scale(zoom) to mesh vertices
-								+	ShaderStd.CREEN_SPACE_RATIO 					//meshVertexData.multipy(cameraTransform.screenSpaceRatio);		//apply screen space ration to mesh vertices(1 pixel in backbufer is have different size bacause it based on backbufer w, h. In backbuffer coordinates is -1 - 1 not the w, h passed in configure back buffer
+								+	ShaderStd.SCREEN_SPACE_RATIO 					//meshVertexData.multipy(cameraTransform.screenSpaceRatio);		//apply screen space ration to mesh vertices(1 pixel in backbufer is have different size bacause it based on backbufer w, h. In backbuffer coordinates is -1 - 1 not the w, h passed in configure back buffer
 								+	"mov	v0, 		va1						\n" //copy uvData to v1
 								+	"mov	op,			vt0						  ";//copy meshVertexData to output
 								

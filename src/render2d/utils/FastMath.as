@@ -27,6 +27,7 @@ package render2d.utils
 			return 180 * angle / Math.PI;
 		}	
 		
+		[Inline]
 		public static function angle(x1:Number, y1:Number, x2:Number, y2:Number):Number
 		{
 			x1 = x1 - x2;

@@ -5,7 +5,7 @@ package render2d.core.display
 	import render2d.core.gl.Driver;
 	import render2d.core.materials.BaseMaterial;
 	
-	public class Renderable extends Transform
+	public class Renderable extends Transform implements IUpdatable
 	{
 		public var material:BaseMaterial;
 		public var geometry:BaseGeometry;
@@ -20,6 +20,11 @@ package render2d.core.display
 		public function render(drvier:Driver):void
 		{
 			drvier.drawRenderable(this);
+		}
+		
+		public function update(worldStep:WorldStep):void 
+		{
+			
 		}
 	}
 }

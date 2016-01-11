@@ -1,5 +1,6 @@
 package render2d.core.gl 
 {
+	import flash.display.BitmapData;
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DClearMask;
 	import flash.display3D.Context3DProgramType;
@@ -9,10 +10,14 @@ package render2d.core.gl
 	import render2d.core.cameras.Camera;
 	import render2d.core.display.ConstantBuffer;
 	import render2d.core.display.Renderable;
+	import render2d.core.gl.texture.BitmapTexture;
+	import render2d.core.gl.texture.TextureUploader;
 	
 	public class Driver implements IShaderContext
 	{
-		private var context:Context3D;
+		public var context:Context3D;
+		
+		private var textureUploader:TextureUploader;
 		
 		private var materialContext:MaterialContext;
 		private var geometryContext:GeometryContext;
@@ -26,9 +31,13 @@ package render2d.core.gl
 		public function Driver(context:Context3D) 
 		{
 			this.context = context;
-			context.enableErrorChecking = true;
 			
 			initialize();
+		}
+		
+		public function createBitmapTexture(bitmapSource:BitmapData, isUseMipMaps:Boolean = false):BitmapTexture
+		{
+			return textureUploader.uploadTexture(bitmapSource, isUseMipMaps);
 		}
 		
 		public function configureBackbuffer(width:Number, height:Number, antiAlias:int = 0):void
@@ -40,7 +49,7 @@ package render2d.core.gl
 		public function drawRenderable(renderable:Renderable):void
 		{
 			renderable.copyTransformTo(vertexConstantBuffer.constantsValue, 8);
-			
+			camera.copyTransformTo(vertexConstantBuffer.constantsValue, 0);
 			
 			vertexConstantBuffer.size = 16;
 			
@@ -59,8 +68,6 @@ package render2d.core.gl
 			materialContext.clear();
 			context.clear(0, 0, 0, 1, 1, 0, Context3DClearMask.COLOR);
 			vertexConstantBuffer.size = 4;
-			
-			camera.copyTransformTo(vertexConstantBuffer.constantsValue, 0);
 		}
 		
 		public function drawTriangles(indexBuffer:IndexBuffer3D, firstIndex:int = 0, numTriangles:int = -1):void
@@ -71,6 +78,7 @@ package render2d.core.gl
 		
 		public function present():void
 		{
+			textureUploader.update();
 			context.present();
 		}
 		
@@ -101,6 +109,8 @@ package render2d.core.gl
 		private function initialize():void 
 		{
 			getProfile(context)
+			
+			textureUploader = new TextureUploader(context)
 			shaderContext = new ShaderContext(profile, context);
 			geometryContext = new GeometryContext(profile, context);
 			materialContext = new MaterialContext(profile, context);

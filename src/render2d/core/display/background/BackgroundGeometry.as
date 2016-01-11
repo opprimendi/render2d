@@ -27,10 +27,12 @@ package render2d.core.display.background
 		
 		private function construct():void 
 		{
-			setVertexAndUV(0, width * -0.5,  height * -0.5, 	-0.5, 	-0.5);
-			setVertexAndUV(1, width *  0.5,  height * -0.5, 	 0.5, 	-0.5);
-			setVertexAndUV(2, width *  0.5,  height *  0.5, 	 0.5, 	 0.5);
-			setVertexAndUV(3, width * -0.5,  height *  0.5, 	-0.5, 	 0.5);
+			setVertexAndUV(0, width * -0.5,  height * -0.5, 	-1, 	-1);
+			setVertexAndUV(1, width *  0.5,  height * -0.5, 	 1, 	-1);
+			setVertexAndUV(2, width *  0.5,  height *  0.5, 	 1, 	 1);
+			setVertexAndUV(3, width * -0.5,  height *  0.5, 	-1, 	 1);
+			
+
 			
 			//setVertexAndUV(0, width * -0.5,  height * -0.5, 	-0.1, 	-0.1);
 			//setVertexAndUV(1, width *  0.5,  height * -0.5, 	 0.1, 	-0.1);
