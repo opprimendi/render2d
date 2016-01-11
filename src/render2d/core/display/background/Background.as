@@ -17,7 +17,7 @@ package render2d.core.display.background
 			super();
 			
 			this.material = material;
-			material.samplerData = new SamplerData(Context3DWrapMode.REPEAT, Context3DTextureFilter.LINEAR, Context3DMipFilter.MIPLINEAR);
+			material.samplerData = new SamplerData(Context3DWrapMode.REPEAT, Context3DTextureFilter.NEAREST, Context3DMipFilter.MIPNEAREST);
 			material.shader = StandarShders.BACKGROUND_SHADER;
 			
 			this.geometry = new BackgroundGeometry(width, height);

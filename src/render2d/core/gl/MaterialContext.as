@@ -30,6 +30,7 @@ package render2d.core.gl
 		private function initialize():void 
 		{
 			fragmentBuffer = new ConstantBuffer(profile.maxFragmentConstants, Context3DProgramType.FRAGMENT);
+			setSamplerTo(0, samplerData);//set default sampler
 		}
 		
 		[Inline]
@@ -65,7 +66,15 @@ package render2d.core.gl
 					setColor(color);
 			}
 			
-			samplerData = currentMaterial.samplerData;
+			if (!SamplerData.isEqual(samplerData, currentMaterial.samplerData))
+			{
+				samplerData = currentMaterial.samplerData;
+				setSamplerTo(0, samplerData);
+			}
+		}
+		
+		private function setSamplerTo(samplerIndex:int, sampler:SamplerData):void
+		{
 			context3D.setSamplerStateAt(0, samplerData.wrapMode, samplerData.filter, samplerData.mipFilter);
 		}
 		

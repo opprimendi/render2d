@@ -60,15 +60,23 @@ package render2d.core.materials
 				_rect.width = w > sourceWidth? sourceWidth:w;
 				_rect.height = h > sourceHeight? sourceHeight:h;
 				
-				mipmap = getMipMapHolder(w, h, alpha);
-				
-				if (alpha)
-					mipmap.fillRect(_rect, 0);
-				
-				_matrix.a = _rect.width / source.width;
-				_matrix.d = _rect.height / source.height;
-				
-				mipmap.draw(source, _matrix, null, null, null, true);
+				if (w == sourceWidth && h == sourceHeight)//if base mip level textureSize==mipHolderSize not need to draw,clean,etc
+				{
+					mipmap = source;
+				}
+				else
+				{
+					mipmap = getMipMapHolder(w, h, alpha);
+					
+					if (alpha)
+						mipmap.fillRect(_rect, 0);
+					
+					_matrix.a = _rect.width / source.width;
+					_matrix.d = _rect.height / source.height;
+					//TODO: возможно есть проблема с отрисовкой текстуры в 1х1 или малые  размеры т.к в неокторых случаях наблюдалась просадка в таких моентах
+					//возможно следует для 1х1 брать каким то образом усредненный цвет и для маленьких размеров то же
+					mipmap.draw(source, _matrix, null, null, null, true);
+				}
 				
 				if (target is Texture)
 				{

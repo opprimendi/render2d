@@ -15,16 +15,19 @@ package render2d.utils
 			return Math.log(value) / Math.log(base);
 		}
 		
+		public static const ONE_DEGREE_IN_RADIANS:Number = Math.PI / 180;
+		public static const ONE_RADIAN_IN_DEGREE:Number = 180 / Math.PI;
+		
 		[Inline]
 		public static function convertToRadian(angle:Number):Number
 		{
-			return angle * Math.PI / 180;
+			return angle * ONE_DEGREE_IN_RADIANS;
 		}
 		
 		[Inline]
 		public static function convertToDegree(angle:Number):Number
 		{
-			return 180 * angle / Math.PI;
+			return angle * ONE_RADIAN_IN_DEGREE;
 		}	
 		
 		[Inline]
@@ -35,6 +38,17 @@ package render2d.utils
 
 			return Math.atan2(x1, y1);
         }
+		
+		public static function absNumber(n:Number):Number
+		{
+			return n < 0? -n:n;
+		}
+		
+		public static function absInt(i:int):int
+		{
+			return i < 0? -i:i;
+		}
+		
 		
 	}
 

@@ -4,6 +4,7 @@ package render2d.core.gl
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DClearMask;
 	import flash.display3D.Context3DProgramType;
+	import flash.display3D.Context3DTriangleFace;
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.Program3D;
 	import flash.utils.ByteArray;
@@ -43,6 +44,8 @@ package render2d.core.gl
 		public function configureBackbuffer(width:Number, height:Number, antiAlias:int = 0):void
 		{
 			context.configureBackBuffer(width, height, antiAlias, false);
+			//context.setCulling(Context3DTriangleFace.FRONT);
+			
 			camera.configure(width, height);
 		}
 		

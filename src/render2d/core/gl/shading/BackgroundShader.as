@@ -16,8 +16,8 @@ package render2d.core.gl.shading
 								+	ShaderStd.SCREEN_SPACE_RATIO 					//meshVertexData.multipy(cameraTransform.screenSpaceRatio);
 								+	"mov	vt2			va1						\n" //Vec2[] uvData = mesh.uvData;
 								+	"mov	vt3			vc0						\n" //Vec4[] cameraTransformBuffer = cameraTransform.clone();
-								+	"div	vt2.xy		vt2.xy		vt1.xy		\n" //meshVertexData.multipy(cameraScale);
-								//+	"sub	vt2.x		vt2.x		vt3.z		\n" //meshVertexData.multipy(cameraScale);
+								+	"mul	vt2.xy		vt2.xy		vt1.xy		\n" //meshVertexData.multipy(cameraScale); was div
+								
 								+	"mul	vt3 		vt3			vc2.zw		\n" //cameraTransformBuffer.multiplu(meshTransform.scale);
 								+	"add	vt2 		vt2			vt3.xy		\n" //uvData.add(cameraTransform.position);
 								+	"mov	v0	 		vt2						\n" //copy uvData to v1

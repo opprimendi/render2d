@@ -35,17 +35,22 @@ package render2d.core.gl.texture
 				else
 				{
 					//trace("upload mip", currentTexture.currentMipLevel);
-					MipmapGenerator.generateMipMaps(currentTexture.textureSource, currentTexture.nativeTexture, currentTexture.isUseAlpha, -1, currentTexture.currentMipLevel, 1);
-				}
+					uploadCurrentTexture(currentTexture);
 					
-				currentTexture.currentMipLevel--;
+				}
 			}
+		}
+		
+		private function uploadCurrentTexture(currentTexture:BitmapTexture):void 
+		{
+			MipmapGenerator.generateMipMaps(currentTexture.textureSource, currentTexture.nativeTexture, currentTexture.isUseAlpha, -1, currentTexture.currentMipLevel, 1);
+			currentTexture.currentMipLevel--;
 		}
 		
 		public function uploadTexture(textureSource:BitmapData, isUseMipmaps:Boolean = true):BitmapTexture 
 		{
 			var mipLevel:int = FastMath.log(textureSource.width, 2);
-			var texture:Texture = context3D.createTexture(textureSource.width, textureSource.height, textureSource.transparent? Context3DTextureFormat.COMPRESSED:Context3DTextureFormat.COMPRESSED_ALPHA, false, isUseMipmaps? mipLevel:0);
+			var texture:Texture = context3D.createTexture(textureSource.width, textureSource.height, textureSource.transparent? Context3DTextureFormat.BGRA_PACKED:Context3DTextureFormat.BGR_PACKED, false, isUseMipmaps? mipLevel:0);
 			
 			var textureUploadData:BitmapTexture = new BitmapTexture();
 			textureUploadData.currentMipLevel = mipLevel;
@@ -57,13 +62,16 @@ package render2d.core.gl.texture
 			textureUploadData.width = textureSource.width;
 			textureUploadData.height = textureSource.height;
 			
-			texturesList.push(textureUploadData);
-			
 			if (!isUseMipmaps)
 			{
 				textureUploadData.currentMipLevel = 0;
 				textureUploadData.maxMipLevel = 0;
 			}
+			else
+				texturesList.push(textureUploadData);
+			
+			uploadCurrentTexture(textureUploadData);
+			
 			
 			return textureUploadData;
 		}
