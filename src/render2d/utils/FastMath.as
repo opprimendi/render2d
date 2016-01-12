@@ -33,10 +33,10 @@ package render2d.utils
 		[Inline]
 		public static function angle(x1:Number, y1:Number, x2:Number, y2:Number):Number
 		{
-			x1 = x1 - x2;
-			y1 = y1 - y2;
+			x1 = x2 - x1;
+			y1 = y2 - y1;
 
-			return Math.atan2(x1, y1);
+			return Math.atan2(y1, x1) //+ Math.PI / 2;
         }
 		
 		public static function absNumber(n:Number):Number
