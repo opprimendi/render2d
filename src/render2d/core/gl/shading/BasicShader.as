@@ -15,23 +15,23 @@ package render2d.core.gl.shading
 									//float ynew = p.x * s + p.y * c;
 									
 								+	"mov	vt2 		va0					    \n" //Vec2[] meshVertexData = mesh.vertexData;
-								+	"mul	vt2.x		vt2.x		vc3.x		\n" //meshVertexData.multipy(meshTransform.scale);
-								+	"mul	vt2.y		vt2.y		vc3.y		\n" //meshVertexData.multipy(meshTransform.scale);
-								+	"sub	vt0.x		vt2.x		vt2.y		\n" //meshVertexData.multipy(meshTransform.scale);
+								//+	"mul	vt2.x		vt2.x		vc3.x		\n" //meshVertexData.multipy(meshTransform.scale);
+								//+	"mul	vt2.y		vt2.y		vc3.y		\n" //meshVertexData.multipy(meshTransform.scale);
+								//+	"sub	vt0.x		vt2.x		vt2.y		\n" //meshVertexData.multipy(meshTransform.scale);
 								
 								
-								+	"mov	vt2 		va0						\n" //Vec2[] meshVertexData = mesh.vertexData;
-								+	"mul	vt2.x		vt2.x		vc3.y		\n" //meshVertexData.multipy(meshTransform.scale);
-								+	"mul	vt2.y		vt2.y		vc3.x		\n" //meshVertexData.multipy(meshTransform.scale);
-								+	"add	vt0.y		vt2.x		vt2.y		\n" //meshVertexData.multipy(meshTransform.scale);
+								//+	"mov	vt2 		va0						\n" //Vec2[] meshVertexData = mesh.vertexData;
+								//+	"mul	vt2.x		vt2.x		vc3.y		\n" //meshVertexData.multipy(meshTransform.scale);
+								//+	"mul	vt2.y		vt2.y		vc3.x		\n" //meshVertexData.multipy(meshTransform.scale);
+								//+	"add	vt0.y		vt2.x		vt2.y		\n" //meshVertexData.multipy(meshTransform.scale);
 									
 								+	"mul	vt0.xy		vt0.xy		vc2.zw		\n" //meshVertexData.multipy(meshTransform.scale);
 								+	"sub	vt0.xy		vt0.xy		vc0.xy		\n" //meshVertexData.sub(cameraTransform.position);
 								+	"add	vt0.xy		vt0.xy		vc2.xy		\n" //meshVertexData.add(meshTransform.position);
-								+	"mov	vt1.xy		vc0.zw					\n" //Vec2 cameraScale = cameraTransform.scale;
-								+	"abs	vt1.y		vt1.y					\n"	//cameraScale.y = Math.abs(cameraScale.y);
-								+	"mul	vt0.xy		vt0.xy		vt1.xy		\n" //meshVertexData.multipy(cameraScale);
-								+	ShaderStd.SCREEN_SPACE_RATIO						//meshVertexData.multipy(cameraTransform.screenSpaceRatio);
+								//+	"mov	vt1.xy		vc0.zw					\n" //Vec2 cameraScale = cameraTransform.scale;
+								//+	"abs	vt1.y		vt1.y					\n"	//cameraScale.y = Math.abs(cameraScale.y);
+								+	"mul	vt0.xy		vt0.xy		vc0.zw		\n" //meshVertexData.multipy(cameraScale);
+								//+	ShaderStd.SCREEN_SPACE_RATIO					//meshVertexData.multipy(cameraTransform.screenSpaceRatio);
 								+	"mov	v0, 		va1						\n" //copy uvData to v1
 								+	"mov	op,			vt0						  ";//copy meshVertexData to output
 								

@@ -44,7 +44,7 @@ package render2d.core.gl
 		public function configureBackbuffer(width:Number, height:Number, antiAlias:int = 0):void
 		{
 			context.configureBackBuffer(width, height, antiAlias, false);
-			//context.setCulling(Context3DTriangleFace.FRONT);
+			context.setCulling(Context3DTriangleFace.FRONT);
 			
 			camera.configure(width, height);
 		}

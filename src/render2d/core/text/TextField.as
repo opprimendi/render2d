@@ -55,8 +55,8 @@ package render2d.core.text
 			_transformData[2] = scaleX;
 			_transformData[3] = -scaleY;
 			
-			_transformData[4] = Math.cos(FastMath.convertToRadian(_rotationX));
-			_transformData[5] = Math.sin(FastMath.convertToRadian(_rotationX));
+			_transformData[4] = Math.cos(FastMath.convertToRadian(_rotation));
+			_transformData[5] = Math.sin(FastMath.convertToRadian(_rotation));
 			
 			return _transformData;
 		}

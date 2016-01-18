@@ -10,6 +10,8 @@ package render2d.core.cameras
 		private var halfWidth:Number;
 		private var halfHeiight:Number;
 		
+		public var projection:Projection = new Projection();
+		
 		public function Camera() 
 		{
 			
@@ -17,29 +19,28 @@ package render2d.core.cameras
 		
 		public function configure(width:Number, height:Number):void
 		{	
+			projection.configure(width, height);
+			
 			_height = height;
 			_width = width;
 			
 			halfWidth = width / 2;
 			halfHeiight = height / 2;
-			
-			hScreenSpaceRatio = 1 / height * 2;
-			wScreenSpaceRatio = 1 / width * 2;
 		}
 		
 		override public function copyTransformTo(constantsVector:Vector.<Number>, registerIndex:int):void 
 		{
 			constantsVector[registerIndex++] = x;
-			constantsVector[registerIndex++] = -y;
+			constantsVector[registerIndex++] = y;
 			
-			constantsVector[registerIndex++] = scaleX;
-			constantsVector[registerIndex++] = -scaleY;
+			constantsVector[registerIndex++] = projection.scaleX * scaleX;
+			constantsVector[registerIndex++] = projection.scaleY * scaleY;
 			
 			constantsVector[registerIndex++] = 0;
 			constantsVector[registerIndex++] = 0;
 			
-			constantsVector[registerIndex++] = transformData[6];
-			constantsVector[registerIndex++] = transformData[7];
+			constantsVector[registerIndex++] = 0;//projection.scaleX;
+			constantsVector[registerIndex++] = 0;//projection.scaleY;
 		}
 		
 		public function get minX():Number
@@ -60,26 +61,6 @@ package render2d.core.cameras
 		public function get maxY():Number
 		{
 			return y + halfHeiight / scaleY;
-		}
-		
-		public function get wScreenSpaceRatio():Number 
-		{
-			return transformData[6];
-		}
-		
-		public function set wScreenSpaceRatio(value:Number):void 
-		{
-			transformData[6] = value;
-		}
-		
-		public function get hScreenSpaceRatio():Number 
-		{
-			return transformData[7];
-		}
-		
-		public function set hScreenSpaceRatio(value:Number):void 
-		{
-			transformData[7] = value;
 		}
 		
 		public function get width():Number 

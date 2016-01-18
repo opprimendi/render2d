@@ -18,8 +18,8 @@ package render2d.core.primitives
 			setVertexAndUV(2,  0.5,   0.5, 1, 1);
 			setVertexAndUV(3, -0.5,   0.5, 0, 1);
 		
-			updateTriangleMap(0, 0, 1, 2);
-			updateTriangleMap(1, 0, 2, 3);
+			updateTriangleMap(0, 0, 1, 3);
+			updateTriangleMap(1, 1, 2, 3);
 		}
 	}
 }
