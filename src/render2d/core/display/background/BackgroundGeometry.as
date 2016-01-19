@@ -4,8 +4,6 @@ package render2d.core.display.background
 	
 	public class BackgroundGeometry extends BaseGeometry
 	{
-		private var width:Number;
-		private var height:Number;
 		
 		public function BackgroundGeometry(width:Number, height:Number) 
 		{

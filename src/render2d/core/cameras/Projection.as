@@ -31,7 +31,7 @@ package render2d.core.cameras
 		private function calculateProjection():void 
 		{
 			scaleX =  2.0 / width;
-			scaleY =  -2.0 / height;
+			scaleY = -2.0 / height;
 		}
 	}
 }

@@ -58,10 +58,10 @@ package render2d.core.geometries
 		public function copyTransformTo(constantsVector:Vector.<Number>, registerIndex:int):void 
 		{
 			constantsVector[registerIndex++] = x;
-			constantsVector[registerIndex++] = -y;
+			constantsVector[registerIndex++] = y;
 			
 			constantsVector[registerIndex++] = scaleX;
-			constantsVector[registerIndex++] = -scaleY;
+			constantsVector[registerIndex++] = scaleY;
 			
 			constantsVector[registerIndex++] = Math.cos(FastMath.convertToRadian(_rotation));
 			constantsVector[registerIndex++] = Math.sin(FastMath.convertToRadian(_rotation));

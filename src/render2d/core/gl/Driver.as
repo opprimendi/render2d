@@ -7,6 +7,7 @@ package render2d.core.gl
 	import flash.display3D.Context3DTriangleFace;
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.Program3D;
+	import flash.geom.Rectangle;
 	import flash.utils.ByteArray;
 	import render2d.core.cameras.Camera;
 	import render2d.core.display.ConstantBuffer;
@@ -70,7 +71,10 @@ package render2d.core.gl
 		{
 			materialContext.clear();
 			context.clear(0, 0, 0, 1, 1, 0, Context3DClearMask.COLOR);
-			vertexConstantBuffer.size = 4;
+			//vertexConstantBuffer.size = 4;
+			
+			vertexConstantBuffer.clear(context);
+			vertexConstantBuffer.clearConstants();
 		}
 		
 		public function drawTriangles(indexBuffer:IndexBuffer3D, firstIndex:int = 0, numTriangles:int = -1):void
