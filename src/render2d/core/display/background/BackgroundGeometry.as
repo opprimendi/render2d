@@ -40,7 +40,7 @@ package render2d.core.display.background
 			//setVertexAndUV(3, width * -0.5,  height *  0.5, 	-0.1, 	 0.1);
 		
 			updateTriangleMap(0, 0, 1, 2);
-			updateTriangleMap(1, 0, 2, 3);
+			updateTriangleMap(1, 2, 3, 0);
 			
 			
 		}

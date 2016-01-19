@@ -32,7 +32,7 @@ package render2d.core.gl
 		public function Driver(context:Context3D) 
 		{
 			this.context = context;
-			
+			context.enableErrorChecking = true;
 			initialize();
 		}
 		
@@ -44,7 +44,7 @@ package render2d.core.gl
 		public function configureBackbuffer(width:Number, height:Number, antiAlias:int = 0):void
 		{
 			context.configureBackBuffer(width, height, antiAlias, false);
-			context.setCulling(Context3DTriangleFace.FRONT);
+			context.setCulling(Context3DTriangleFace.BACK);
 			
 			camera.configure(width, height);
 		}

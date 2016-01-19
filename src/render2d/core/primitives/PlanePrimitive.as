@@ -18,8 +18,13 @@ package render2d.core.primitives
 			setVertexAndUV(2,  0.5,   0.5, 1, 1);
 			setVertexAndUV(3, -0.5,   0.5, 0, 1);
 		
-			updateTriangleMap(0, 0, 1, 3);
-			updateTriangleMap(1, 1, 2, 3);
+			//cw
+			updateTriangleMap(0, 0, 1, 2);
+			updateTriangleMap(1, 2, 3, 0);
+			
+			//ccw could be double sided
+			//updateTriangleMap(0, 3, 2, 1);
+			//updateTriangleMap(1, 1, 0, 3);
 		}
 	}
 }

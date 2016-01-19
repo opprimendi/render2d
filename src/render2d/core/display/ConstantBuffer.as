@@ -58,7 +58,7 @@ package render2d.core.display
 		{
 			if (size == 0)
 				return;
-				
+			
 			this.registerOffset = registerOffset;
 			context3D.setProgramConstantsFromVector(type, registerOffset, constantsValue, size / 4);
 		}
