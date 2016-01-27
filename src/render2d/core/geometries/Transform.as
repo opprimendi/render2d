@@ -1,5 +1,6 @@
 package render2d.core.geometries 
 {
+	import flash.display3D.Context3D;
 	import render2d.utils.FastMath;
 	public class Transform 
 	{
@@ -55,6 +56,17 @@ package render2d.core.geometries
 			return _transformData;
 		}
 		
+		public function copyTransformFrom(transform:Transform):void 
+		{
+			x = transform.x;
+			y = transform.y;
+			
+			scaleX = transform.scaleX;
+			scaleY = transform.scaleY;
+			
+			_rotation = _rotation;
+		}
+		
 		public function copyTransformTo(constantsVector:Vector.<Number>, registerIndex:int):void 
 		{
 			constantsVector[registerIndex++] = x;
@@ -65,6 +77,31 @@ package render2d.core.geometries
 			
 			constantsVector[registerIndex++] = Math.cos(FastMath.convertToRadian(_rotation));
 			constantsVector[registerIndex++] = Math.sin(FastMath.convertToRadian(_rotation));
+		}
+		
+		public function setFromTransform(transform:Transform):void
+		{
+			x = transform.x;
+			y = transform.y;
+			
+			scaleX = transform.scaleX;
+			scaleY = transform.scaleY;
+			
+			_rotation = transform._rotation;
+		}
+		
+		public function concatTransform(transform:Transform):void
+		{
+			var xnew:Number = x * Math.cos(transform.rotation) - y * Math.sin(transform.rotation);
+			var ynew:Number = x * Math.sin(transform.rotation) + y * Math.cos(transform.rotation);
+			
+			x = xnew + transform.x;
+			y = ynew + transform.y;
+			
+			scaleX = scaleX + transform.scaleX;
+			scaleY = scaleY + transform.scaleY;
+			
+			_rotation = _rotation + transform.rotation;
 		}
 		
 		public function identity():void 
@@ -87,6 +124,8 @@ package render2d.core.geometries
 			return "[Transform transformData=" + transformData + " x=" + x + " y=" + y + " scaleX=" + scaleX + " scaleY=" + scaleY + 
 						" rotationX=" + rotation + "]";
 		}
+		
+		
 	}
 
 }
