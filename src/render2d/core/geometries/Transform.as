@@ -4,144 +4,38 @@ package render2d.core.geometries
 	import flash.geom.Point;
 	import render2d.utils.FastMath;
 	
+	use namespace transform_inner;
+	
 	public class Transform 
 	{
-		public var x:Number = 0;
-		public var y:Number = 0;
+		transform_inner var transformMatrix:Matrix;
 		
-		public var scaleX:Number = 1;
-		public var scaleY:Number = 1;
+		transform_inner var _isMarkAsChanged:Boolean = false;
 		
-		private var _rotation:Number = 0;
-		private var rotationRad:Number = 0;
-		private var rotationCos:Number = 1;
-		private var rotationSin:Number = 0;
+		transform_inner var _rotation:Number = 0;
+		transform_inner var _rotationRadians:Number = 0;
+		transform_inner var _rotationSine:Number = 0;
+		transform_inner var _rotationCosine:Number = 1;
+		
+		transform_inner var _scaleX:Number = 1;
+		transform_inner var _scaleY:Number = 1;
+		
+		transform_inner var _x:Number = 0;
+		transform_inner var _y:Number = 0;
 		
 		public function Transform() 
 		{
-			identity();
+			transformMatrix = new Matrix();
 		}
 		
-		public function get rotation():Number 
+		public function get isMarkAsChanged():Boolean
 		{
-			return _rotation;
+			return _isMarkAsChanged;
 		}
 		
-		public function set rotation(value:Number):void 
+		[Inline]
+		public final function transformPoint(pointToTransform:Point):void
 		{
-			if (_rotation == value)
-				return;
-				
-			_rotation = value;
-			
-			rotationRad = FastMath.convertToRadian(_rotation);
-			rotationSin = Math.sin(rotationRad);
-			rotationCos = Math.cos(rotationRad);
-		}
-		
-		public function copyTransformFrom(transform:Transform):void 
-		{
-			x = transform.x;
-			y = transform.y;
-			
-			scaleX = transform.scaleX;
-			scaleY = transform.scaleY;
-			
-			rotation = transform.rotation;
-		}
-		
-		public function copyTransformTo(constantsVector:Vector.<Number>, registerIndex:int):void 
-		{
-			constantsVector[registerIndex++] = x;
-			constantsVector[registerIndex++] = y;
-			
-			constantsVector[registerIndex++] = scaleX;
-			constantsVector[registerIndex++] = scaleY;
-			
-			constantsVector[registerIndex++] = rotationCos;
-			constantsVector[registerIndex++] = rotationSin;
-		}
-		
-		public function copyTo(transform:Transform):void
-		{
-			transform.copyFrom(this);
-		}
-		
-		public function copyFrom(transform:Transform):void
-		{
-			x = transform.x;
-			y = transform.y;
-			
-			scaleX = transform.scaleX;
-			scaleY = transform.scaleY;
-			
-			rotation = transform.rotation;
-		}
-		
-		public function concat(transform:Transform):void
-		{
-			/**
-			 * свой поворот 90
-			 * скейл контейнера 0.5 по Y
-			 * =>
-			 * скейл по игрик полностью перейдет в X
-			 * 
-			 * sin(90) - 1
-			 * cos(90) ~ 0
-			 * 
-			 * mScaleX = 1
-			 * mScaleY = 1
-			 * 
-			 * cScaleX = 1
-			 * cScaleY = 0.5
-			 * 
-			 * sAngle = 90
-			 * sin - 1
-			 * cos - 0
-			 * 
-			 * mScaleX * cos + cScaleY * sin - 0.5
-			 * mScaleX * sin + cScaleY * cos - 1
-			 * 
-			 * 
-			 * mScaleX = 1
-			 * mScaleY = 1
-			 * 
-			 * cScaleX = 1
-			 * cScaleY = 0.5
-			 * 
-			 * sAngle = 0
-			 * sin - 0
-			 * cos - 1
-			 * 
-			 * mScaleX * cos + cScaleY * sin - 1
-			 * mScaleX * sin + cScaleY * cos - 0.5
-			 */
-			
-			scaleX *= transform.scaleX;
-			scaleY *= transform.scaleY;
-			
-			//trace(scaleX, scaleY, rotationCos, rotationSin, _rotation);
-				
-			//if(scaleX != 1)
-			//	var newScaleX:Number = scaleX * rotationCos + scaleY * rotationSin;
-			
-			//if(scaleY != 1)
-			//	scaleY = scaleX * rotationSin + scaleY * rotationCos;
-			
-			//scaleX = newScaleX;
-				
-			var xnew:Number = x * transform.rotationCos - y * transform.rotationSin;
-			var ynew:Number = x * transform.rotationSin + y * transform.rotationCos;
-			
-			x = xnew + transform.x;
-			y = ynew + transform.y;
-			
-			rotation = rotation + transform.rotation;
-		}
-		
-		public function transformPoint(pointToTransform:Point):void
-		{
-
 			/** a, b,
 			 *  c, d,
 			 *  tx, ty
@@ -177,37 +71,235 @@ package render2d.core.geometries
 			var px:Number = pointToTransform.x;
 			var py:Number = pointToTransform.y;
 			
+			pointToTransform.setTo(
+									px * transformMatrix.a + py * transformMatrix.c + _x, 
+									px * transformMatrix.b + py * transformMatrix.d + _y);
+		}
+		
+		[Inline]
+		public final function softConcat(transform:Transform):void
+		{
+			transformMatrix.concat(transform.transformMatrix);
 			
+			_x = transformMatrix.tx;
+			_y = transformMatrix.ty;
+		}
+		
+		public function concat(transform:Transform, isSoftConcat:Boolean = false):void 
+		{
+			softConcat(transform);
 			
-			var xnew:Number = px * rotationCos - py * rotationSin;
-			var ynew:Number = px * rotationSin + py * rotationCos;
-			xnew *= scaleX;
-			ynew *= scaleY;
-			//xnew = (pointToTransform.x * scaleX * rotationCos) + (pointToTransform.y * -rotationSin * scaleX);
-			//ynew = (pointToTransform.x * rotationSin * scaleY) + (pointToTransform.y * rotationCos * scaleY);
+			if (isSoftConcat == false)
+			{
+				recauclateTransform();
+				_isMarkAsChanged = true;
+			}
+		}
+		
+		[Inline]
+		public final function softCopyFrom(transform:Transform):void
+		{
+			transformMatrix.copyFrom(transform.transformMatrix);
 			
-			xnew += x;
-			ynew += y;
+			_x = transform._x;
+			_y = transform._y;
+		}
+		
+		public function copyFrom(transform:Transform, softCopy:Boolean = false):void 
+		{
+			softCopyFrom(transform);
 			
-			pointToTransform.setTo(xnew, ynew);
+			if (softCopy == false)
+			{
+				_rotation = transform._rotation;
+				_rotationRadians = transform._rotationRadians;
+				_rotationSine = transform._rotationSine;
+				_rotationCosine = transform._rotationCosine;
+				
+				_scaleX = transform._scaleX;
+				_scaleY = transform._scaleY;
+			
+				_isMarkAsChanged = true;
+			}
+		}
+		
+		public function get rotation():Number
+		{
+			return _rotation;
+		}
+		
+		private function calculateRotationAdditionalValues():void
+		{
+			_rotationRadians = FastMath.convertToRadian(_rotation);
+			_rotationSine = Math.sin(_rotationRadians);
+			_rotationCosine = Math.cos(_rotationRadians);
+		}
+		
+		public function set rotation(value:Number):void 
+		{
+			if (value == _rotation) 
+				return;
+				
+			_rotation = value;
+			calculateRotationAdditionalValues();
+			
+			transformMatrix.a = _rotationCosine * _scaleX;
+			transformMatrix.b = _rotationSine * _scaleX;
+			transformMatrix.c = -_rotationSine * _scaleY;
+			transformMatrix.d = _rotationCosine * _scaleY;
+			
+			markAsChanged();
+		}
+		
+		public function get x():Number
+		{
+			return _x;
+		}
+		
+		public function set x(value:Number):void
+		{
+			if (value == _x) 
+				return;
+				
+			_x = value;
+			transformMatrix.tx = _x
+			markAsChanged ();
+		}
+		
+		public function get y():Number
+		{
+			return _y;
+		}
+		
+		public function set y(value:Number):void
+		{
+			if (value == _y) 
+				return;
+				
+			_y = value;
+			transformMatrix.ty = _y
+			markAsChanged ();
+		}
+		
+		public function get scaleX():Number 
+		{
+			return scaleX;
+		}
+		
+		[Inline]
+		public final function calculateScaleX():Number
+		{
+			if (transformMatrix.b == 0) 
+				return transformMatrix.a;
+			else 
+				return Math.sqrt(transformMatrix.a * transformMatrix.a + transformMatrix.b * transformMatrix.b);
+		}
+		
+		public function set scaleX (value:Number):void 
+		{
+			if (value == _scaleX)
+				return;
+				
+			_scaleX = value;
+			
+			if (transformMatrix.c == 0) {
+				
+				if (value != transformMatrix.a)
+					markAsChanged();
+					
+				transformMatrix.a = value;
+			} 
+			else
+			{
+				var a:Number = _rotationCosine * value;
+				var b:Number = _rotationSine * value;
+				
+				if (transformMatrix.a != a || transformMatrix.b != b) 
+					markAsChanged();
+					
+				transformMatrix.a = a;
+				transformMatrix.b = b;
+			}
+		}
+		
+		public function get scaleY():Number
+		{
+			return _scaleY;	
+		}
+		
+		[Inline]
+		public final function calculateScaleY():Number
+		{
+			if (transformMatrix.c == 0)
+				return transformMatrix.d;
+			else 
+				return Math.sqrt(transformMatrix.c * transformMatrix.c + transformMatrix.d * transformMatrix.d);
+		}
+		
+		public function set scaleY (value:Number):void 
+		{
+			if (value == _scaleY)
+				return;
+				
+			_scaleY = value;
+			
+			if (transformMatrix.c == 0) 
+			{
+				if (value != transformMatrix.d)
+					markAsChanged ();
+					
+				transformMatrix.d = value;
+			} 
+			else 
+			{
+				var c:Number = -_rotationSine * value;
+				var d:Number = _rotationCosine * value;
+				
+				if (transformMatrix.d != d || transformMatrix.c != c) 
+					markAsChanged();
+					
+				transformMatrix.c = c;
+				transformMatrix.d = d;
+			}
+		}
+		
+		private function markAsChanged(value:Boolean = true):void 
+		{
+			_isMarkAsChanged = value;
+		}
+		
+		[Inline]
+		public final function recauclateTransform():void
+		{
+			_scaleX = calculateScaleX();
+			_scaleY = calculateScaleY();
+			
+			_x = transformMatrix.tx;
+			_y = transformMatrix.ty;
+			
+			calculateRotationAdditionalValues();
 		}
 		
 		public function identity():void 
 		{
-			x = 0;
-			y = 0;
-			scaleX = 1;
-			scaleY = 1;
+			transformMatrix.identity();
+			
 			_rotation = 0;
-			rotationRad = 0;
-			rotationSin = 0;
-			rotationCos = 1;
+			_rotationRadians = 0;
+			_rotationSine = 0;
+			_rotationCosine = 1;
+			 
+			_scaleX = 1;
+			_scaleY = 1;
+			  
+			_x = 0;
+			_y = 0;
 		}
 		
-		public function toString():String 
+		public function toString():String
 		{
-			return "[Transform x=" + x + " y=" + y + " scaleX=" + scaleX + " scaleY=" + scaleY + " rotation=" + _rotation + 
-						"]";
+			return "[Transform(a=" + transformMatrix.a.toFixed(6) + ", b=" + transformMatrix.b.toFixed(6) + ", c=" + transformMatrix.c.toFixed(6) 
+							+", d=" + transformMatrix.d.toFixed(6) + ", tx=" + transformMatrix.tx.toFixed(6) + ", ty=" + transformMatrix.ty.toFixed(6) + ")]";
 		}
 	}
 }
