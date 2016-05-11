@@ -8,6 +8,7 @@ package render2d.core.primitives
 		
 		public function CirclePrimitive(vertexCount:int = 60) 
 		{
+			super(0, 0, false);
 			this.vertexCount = vertexCount;
 			construct();
 		}
@@ -23,11 +24,11 @@ package render2d.core.primitives
 				var x:Number = r * Math.sin(currentAngle);
 				var y:Number = r * Math.cos(currentAngle);
 				
-				addVertex(x, y, 0, x + 0.5, y + 0.5);
+				addVertexAndUV(x, y, x + 0.5, y + 0.5);
 				mapTriangle(i, i + 1, vertexCount);
 			}
 			
-			addVertex(0, 0, 0.5, 0.5);
+			addVertexAndUV(0, 0, 0.5, 0.5);
 			indecis.push(vertexCount-1, 0, vertexCount);
 		}
 		

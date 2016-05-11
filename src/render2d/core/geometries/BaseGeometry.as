@@ -66,7 +66,7 @@ package render2d.core.geometries
 			indecis[i] = v1;
 			indecis[i + 1] = v2;
 			indecis[i + 2] = v3;
-			trianglesCount++;
+			//trianglesCount++;
 		}
 		
 		/**
