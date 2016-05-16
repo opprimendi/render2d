@@ -2,6 +2,11 @@ package render2d.core.display
 {
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DProgramType;
+	import flash.geom.Matrix;
+	import render2d.core.geometries.Transform;
+	import render2d.core.geometries.transform_inner;
+	
+	use namespace transform_inner;
 	
 	public class ConstantBuffer 
 	{
@@ -19,6 +24,19 @@ package render2d.core.display
 			this.type = type;
 			constantsValue = new Vector.<Number>(size, true);
 			identityVector = new Vector.<Number>(size, true);
+		}
+		
+		[Inline]
+		public final function fillTransform(transform:Transform):void
+		{
+			var matrix:Matrix = transform.transformMatrix
+			
+			constantsValue[size++] = matrix.a;
+			constantsValue[size++] = matrix.b;
+			constantsValue[size++] = matrix.c;
+			constantsValue[size++] = matrix.d;
+			constantsValue[size++] = matrix.tx;
+			constantsValue[size++] = matrix.ty;
 		}
 		
 		[Inline]

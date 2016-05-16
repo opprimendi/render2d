@@ -7,7 +7,6 @@ package render2d.core.gl
 	import flash.display3D.Context3DTriangleFace;
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.Program3D;
-	import flash.geom.Rectangle;
 	import flash.utils.ByteArray;
 	import render2d.core.cameras.Camera;
 	import render2d.core.display.ConstantBuffer;
@@ -52,8 +51,8 @@ package render2d.core.gl
 		
 		public function drawRenderable(renderable:Renderable):void
 		{
-			renderable.copyTransformTo(vertexConstantBuffer.constantsValue, 8);
-			camera.copyTransformTo(vertexConstantBuffer.constantsValue, 0);
+			vertexConstantBuffer.fillTransform(renderable);
+			vertexConstantBuffer.fillTransform(camera);
 			
 			vertexConstantBuffer.size = 16;
 			

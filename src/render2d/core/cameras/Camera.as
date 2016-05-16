@@ -28,7 +28,7 @@ package render2d.core.cameras
 			halfHeiight = height / 2;
 		}
 		
-		override public function copyTransformTo(constantsVector:Vector.<Number>, registerIndex:int):void 
+		public function copyTransformTo(constantsVector:Vector.<Number>, registerIndex:int):void 
 		{
 			constantsVector[registerIndex++] = x;
 			constantsVector[registerIndex++] = y;

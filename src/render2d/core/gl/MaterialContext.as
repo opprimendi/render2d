@@ -66,7 +66,7 @@ package render2d.core.gl
 					setColor(color);
 			}
 			
-			if (!SamplerData.isEqual(samplerData, currentMaterial.samplerData))
+			if (currentMaterial.samplerData && !SamplerData.isEqual(samplerData, currentMaterial.samplerData))
 			{
 				samplerData = currentMaterial.samplerData;
 				setSamplerTo(0, samplerData);

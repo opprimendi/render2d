@@ -163,7 +163,7 @@ package render2d.core.geometries
 				
 			_x = value;
 			transformMatrix.tx = _x
-			markAsChanged ();
+			markAsChanged();
 		}
 		
 		public function get y():Number
@@ -178,7 +178,7 @@ package render2d.core.geometries
 				
 			_y = value;
 			transformMatrix.ty = _y
-			markAsChanged ();
+			markAsChanged();
 		}
 		
 		public function get scaleX():Number 
