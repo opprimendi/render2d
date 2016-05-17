@@ -19,10 +19,10 @@ package render2d.core.primitives
 			//setVertexAndUV(0, -0.5,   0.5, 0, 0);
 			
 			///**
-			  	setVertexAndUV(0, -0.5,  -0.5, 0, 0);
-				setVertexAndUV(1,  0.5,  -0.5, 1, 0);
-				setVertexAndUV(2,  0.5,   0.5, 1, 1);
-				setVertexAndUV(3, -0.5,   0.5, 0, 1);
+			  	setVertexAndUV(0, -1,  -1, 0, 0);
+				setVertexAndUV(1,  1,  -1, 1, 0);
+				setVertexAndUV(2,  1,   1, 1, 1);
+				setVertexAndUV(3, -1,   1, 0, 1);
 			 //*/
 		
 			/**

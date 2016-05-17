@@ -21,6 +21,9 @@ package render2d.core.cameras
 		{	
 			projection.configure(width, height);
 			
+			this.scaleX = projection.scaleX;
+			this.scaleY = projection.scaleY;
+			
 			_height = height;
 			_width = width;
 			

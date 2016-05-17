@@ -33,9 +33,12 @@ package render2d.core.display
 			
 			constantsValue[size++] = matrix.a;
 			constantsValue[size++] = matrix.b;
+			constantsValue[size++] = 0;
+			constantsValue[size++] = matrix.tx;
+			
 			constantsValue[size++] = matrix.c;
 			constantsValue[size++] = matrix.d;
-			constantsValue[size++] = matrix.tx;
+			constantsValue[size++] = 0;
 			constantsValue[size++] = matrix.ty;
 		}
 		
