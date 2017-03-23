@@ -11,6 +11,7 @@ package render2d.core.renderers
 	import flash.display3D.Program3D;
 	import flash.display3D.textures.TextureBase;
 	import flash.display3D.VertexBuffer3D;
+	import flash.geom.Matrix3D;
 	import flash.utils.ByteArray;
 	import render2d.core.cameras.Camera;
 	import render2d.core.display.BlendMode;
@@ -18,7 +19,6 @@ package render2d.core.renderers
 	import render2d.core.geometries.BaseGeometry;
 	import render2d.core.materials.BaseMaterial;
 	import render2d.core.renderers.debug.RendererDebugData;
-	import avm2.intrinsics.memory.li32;
 	import render2d.core.shading.AbstractShader;
 	
 	public class RenderSupport 
@@ -99,7 +99,7 @@ package render2d.core.renderers
 		public function drawRenderable(renderable:Renderable):void
 		{
 			var material:BaseMaterial = renderable.material;
-			var texture:TextureBase = material.texture;
+			var texture:TextureBase = material? material.texture:null;
 			var geom:BaseGeometry = renderable.geometry;
 			
 			//trace('draw renderable', renderable);
@@ -115,7 +115,7 @@ package render2d.core.renderers
 			
 			//trace(material.texture, renderable);
 			
-			if (material.texture != null && (currentMaterial == null || currentMaterial.texture != material.texture))
+			if (material && material.texture != null && (currentMaterial == null || currentMaterial.texture != material.texture))
 				setMaterial(material);
 				
 			if (currentGeometry != geom)
@@ -124,9 +124,9 @@ package render2d.core.renderers
 			rendererDebugData.verticesCount += geom.verticesCount;
 			rendererDebugData.trianglesCount += geom.trianglesCount;
 			
-			setProgramConstantsFromVector(Context3DProgramType.VERTEX, 2, renderable.transformData, 2);
+			//setProgramConstantsFromVector(Context3DProgramType.VERTEX, 2, renderable.transformData, 2);
 			
-			if (renderable.material.useColor)
+			if (renderable.material && renderable.material.useColor)
 			{
 				fragmentColorBuffer[0] = renderable.material.r;
 				fragmentColorBuffer[1] = renderable.material.g;
@@ -227,11 +227,29 @@ package render2d.core.renderers
 		{
 			//context3D.setColorMask(0, 0, 0, 1);
 			
-			context3D.clear(1, 1, 1, 0);
+			context3D.clear(0, 0, 0, 0);
 			rendererDebugData.clear();
 			
 			freeVertexConstants = maxVertexConstants;
 			freeFragmentConstants = maxFragmentConstants;
+		}
+		
+		public function setProgramConstantsFromMatrix(programType:String, firstRegister:int, matrix:Matrix3D, transposed:Boolean):void
+		{
+			var numRegisters:int = 16;
+			
+			if (programType == Context3DProgramType.VERTEX)
+			{
+				freeVertexConstants -= numRegisters;
+			}
+			else
+			{
+				maxFragmentConstants -= numRegisters;
+			}
+			
+			rendererDebugData.stateChanges++;
+			
+			context3D.setProgramConstantsFromMatrix(programType, firstRegister, matrix, transposed);
 		}
 		
 		public function setProgramConstantsFromVector(programType:String, firstRegister:int, data:Vector.<Number>, numRegisters:int = -1):void
@@ -290,7 +308,7 @@ package render2d.core.renderers
 		{
 			rendererDebugData.vertexBuffersUpload++;
 			rendererDebugData.stateChanges++;
-			//trace("uploadVertexBuffer");
+			
 			vertexBuffer.uploadFromVector(vertices, offset, length);
 		}
 		

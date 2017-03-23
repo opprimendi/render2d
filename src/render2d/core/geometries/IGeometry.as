@@ -7,11 +7,11 @@ package render2d.core.geometries
 		
 		function mapTriangle(v1:int, v2:int, v3:int):void;
 		
-		function addVertexAndUV(x:Number, y:Number, u:Number, v:Number):void;
+		function addVertexAndUV(x:Number, y:Number, z:Number, u:Number, v:Number):void;
 		
-		function setVertexAndUV(i:int, x:Number, y:Number, u:Number, v:Number):void;
+		function setVertexAndUV(i:int, x:Number, y:Number, z:Number, u:Number, v:Number):void;
 		
-		function setVertex(i:int, x:Number, y:Number):void;
+		function setVertex(i:int, x:Number, y:Number, z:Number):void;
 		
 		function setUV(i:int, u:Number, v:Number):void;
 	}

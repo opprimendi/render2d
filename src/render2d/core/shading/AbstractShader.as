@@ -38,6 +38,7 @@ package render2d.core.shading
 		
 		public function setToContext(renderSupport:RenderSupport):void
 		{
+			trace("set program", this);
 			renderSupport.setProgram(program);
 		}
 	}

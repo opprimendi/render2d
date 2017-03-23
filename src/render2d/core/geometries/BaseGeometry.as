@@ -7,7 +7,7 @@ package render2d.core.geometries
 	
 	public class BaseGeometry implements IGeometry
 	{
-		private var renderSupport:RenderSupport;
+		protected var renderSupport:RenderSupport;
 		public var vertexBuffer:VertexBuffer3D;
 		public var indexBuffer:IndexBuffer3D;
 		
@@ -37,7 +37,7 @@ package render2d.core.geometries
 			this.verticesCount = verticesCount;
 			this.trianglesCount = trianglesCount;
 			
-			vertices = new Vector.<Number>(verticesCount * 4, isStatic);
+			vertices = new Vector.<Number>(verticesCount * 5, isStatic);
 			indecis = new Vector.<uint>(trianglesCount * 3, isStatic);
 		}
 		
@@ -76,7 +76,7 @@ package render2d.core.geometries
 		 * @param	u - vertex U value
 		 * @param	v - vertex V value
 		 */
-		public function addVertexAndUV(x:Number, y:Number, u:Number, v:Number):void
+		public function addVertexAndUV(x:Number, y:Number, z:Number, u:Number, v:Number):void
 		{
 			minX = Math.min(x, minX);
 			maxX = Math.max(x, maxX);
@@ -86,10 +86,10 @@ package render2d.core.geometries
 			width = Math.abs(minX - maxX);
 			height = Math.abs(minY - maxY);
 			
-			verticesCount += 2;
+			verticesCount += 3;
 			uvsCount += 2;
 			
-			vertices.push(x, y, u, v);
+			vertices.push(x, y, z, u, v);
 		}
 		
 		/**
@@ -100,7 +100,7 @@ package render2d.core.geometries
 		 * @param	u - vertex U value
 		 * @param	v - vertex V value
 		 */
-		public function setVertexAndUV(i:int, x:Number, y:Number, u:Number, v:Number):void
+		public function setVertexAndUV(i:int, x:Number, y:Number, z:Number, u:Number, v:Number):void
 		{
 			minX = Math.min(x, minX);
 			maxX = Math.max(x, maxX);
@@ -110,12 +110,13 @@ package render2d.core.geometries
 			width = Math.abs(minX - maxX);
 			height = Math.abs(minY - maxY);
 			
-			i *= 4;
+			i *= 5;
 			
 			vertices[i] = x;
 			vertices[i + 1] = y;
-			vertices[i + 2] = u;
-			vertices[i + 3] = v;
+			vertices[i + 2] = z;
+			vertices[i + 3] = u;
+			vertices[i + 4] = v;
 		}
 		
 		/**
@@ -124,7 +125,7 @@ package render2d.core.geometries
 		 * @param	x - vertex X value
 		 * @param	y - vertex Y value
 		 */
-		public function setVertex(i:int, x:Number, y:Number):void
+		public function setVertex(i:int, x:Number, y:Number, z:Number):void
 		{
 			minX = Math.min(x, minX);
 			maxX = Math.max(x, maxX);
@@ -136,6 +137,7 @@ package render2d.core.geometries
 			
 			vertices[i] = x;
 			vertices[i + 1] = y;
+			vertices[i + 2] = z;
 		}
 		
 		/**
@@ -184,10 +186,10 @@ package render2d.core.geometries
 		 * Set buffers to context at 0(x, y values), 1(u, v values)
 		 * @param	renderSupport
 		 */
-		private function setBuffers(renderSupport:RenderSupport):void 
+		protected function setBuffers(renderSupport:RenderSupport):void 
 		{
-			renderSupport.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
-			renderSupport.setVertexBufferAt(1, vertexBuffer, 2, Context3DVertexBufferFormat.FLOAT_2);
+			renderSupport.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
+			renderSupport.setVertexBufferAt(1, vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);
 		}
 		
 		/**
@@ -195,7 +197,7 @@ package render2d.core.geometries
 		 */
 		public function updateUV():void
 		{
-			uploadVertexBuffer(verticesCount / 2);
+			uploadVertexBuffer(verticesCount / 5 * 3);
 		}
 		
 		/**
@@ -234,15 +236,15 @@ package render2d.core.geometries
 		 * Init operation. Create buffers and upload them first time
 		 * @param	renderSupport
 		 */
-		private function init(renderSupport:RenderSupport):void 
+		protected function init(renderSupport:RenderSupport):void 
 		{
 			_init = true;
 			
 			this.renderSupport = renderSupport;
 			
-			numVertices = vertices.length / 4;
+			numVertices = vertices.length / 5;
 			
-			vertexBuffer = renderSupport.createVertexBuffer(numVertices, 4);
+			vertexBuffer = renderSupport.createVertexBuffer(numVertices, 5);
 			indexBuffer = renderSupport.createIndexBuffer(indecis.length);
 			
 			uploadVertexBuffer(0, numVertices);

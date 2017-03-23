@@ -3,6 +3,7 @@ package render2d.core.renderers
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DBlendFactor;
 	import flash.display3D.Context3DProgramType;
+	import flash.display3D.Context3DTriangleFace;
 	import flash.geom.Rectangle;
 	import render2d.core.cameras.Camera;
 	import render2d.core.display.BatchedLayer;
@@ -37,18 +38,16 @@ package render2d.core.renderers
 			batchShader.create(renderSupport);
 			batchShader.compile();
 			batchShader.upload(renderSupport);
-			
-			
 		}
 		
 		public function configure(width:Number, height:Number, maxWidth:Number, maxHeight:Number):void
 		{
-			this.context3D.configureBackBuffer(width, height, 4, false);
+			this.context3D.configureBackBuffer(width, height, 3, true);
 			
 			this.context3D.setScissorRectangle(new Rectangle(0, 0, maxWidth, maxHeight));
 			//trace("Sc rect", maxWidth, maxHeight);
 			this.context3D.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
-			//context3D.setCulling(Context3DTriangleFace.FRONT);
+			context3D.setCulling(Context3DTriangleFace.NONE);
 			
 			renderSupport.clear();
 			renderSupport.present();
@@ -64,7 +63,7 @@ package render2d.core.renderers
 		{
 			renderSupport.clear();
 			
-			renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, camera.transformData, 2);
+			//renderSupport.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, camera.transformData, 2);
 			//context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, new <Number>[Math.cos(periodic)/50, Math.sin(periodic)/50, 0, 0], 1);
 			
 			//trace(Math.cos(periodic), periodic);
@@ -88,7 +87,7 @@ package render2d.core.renderers
 				else
 				{
 					
-					if (renderable.material.useColor)
+					if (renderable.material && renderable.material.useColor)
 					{
 						fragmentColorBuffer[0] = renderable.material.r;
 						fragmentColorBuffer[1] = renderable.material.g;
